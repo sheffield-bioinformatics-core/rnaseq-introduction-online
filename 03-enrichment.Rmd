@@ -1,0 +1,308 @@
+---
+title: "Ontologies and Enrichment"
+author: "Mark Dunning"
+date: '`r format(Sys.time(), "Last modified: %d %b %Y")`'
+output: 
+  html_notebook: 
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r echo=FALSE,message=FALSE}
+library(limma)
+```
+
+# Gene-Ontologies and Annotation
+
+This file uses the output of the previous analysis of breast cancer in Degust. If you didn't manage to create these results, you can download them [from here](degust.tsv)
+
+## Gene-Ontology Analysis
+
+In the early days of microarray analysis, people were happy if they got a handful of differentially-expressed genes that they could validate or follow-up. However, with later technologies (and depending on the experimental setup) we might have thousands of statistically-significant results, which no-one has the time to follow-up. Also, we might be interested in pathways / mechanisms that are altered and not just individual genes.
+
+In this section we move towards discovering if our results are ***biologically significant***. Are the genes that we have picked statistical flukes, or are there some commonalities. 
+
+There are two different approaches one might use, and we will cover the theory behind both
+
+
+    
+
+## Theory Part I: Over-representation analysis
+
+- "Threshold-based": require defintion of a statistical threshold to define list of genes to test (e.g. FDR < 0.01)
+- Then a *hypergeometric* test or *Fisher's Exact* test generally used.
+
+The question we are asking here is;
+
+> ***"Are the number of DE genes associated with Theme X significantly greater than what we might expect by chance alone?"***
+
+We can answer this question by knowing
+
+- the total number of DE genes
+- the number of genes in the gene set (pathway or process)
+- the number of genes in the gene set that are found to be DE
+- the total number of tested genes (background)
+
+The formula for Fishers exact test is;
+
+$$ p = \frac{\binom{a + b}{a}\binom{c +d}{c}}{\binom{n}{a +c}} = \frac{(a+b)!(c+d)!(a+c)!(b+d)!}{a!b!c!d!n!} $$
+
+with:-
+
+```{r echo=FALSE}
+df <- data.frame(`In DE List`  = c("a","c","a+c"), `Not in DE list` = c("b","d","b+d"), RowTotal = c("a +b","c+d","a+b+c+d (=n)"))
+rownames(df) <- c("In Gene Set", "Not in Gene Set","Column Total")
+df
+```
+
+In this first test, our genes will be grouped together according to their Gene Ontology (GO) terms:- http://www.geneontology.org/
+
+
+### Abstract example
+
+
+To illustrate the process we will use an abstract example. Let's imagine that we have a bag full of balls. Each ball represents a gene in the *gene universe*. 
+- Paint the balls representing our selected list grey, and paint the rest red.
+
+
+![](media/bag-and-balls.png)
+
+In this small example, we can define;
+
+- Total number of balls: 40
+- Total number of interesting (grey) balls: 10
+
+Now, lets select a number (say, 12) of the balls at random without seeing into the bag and look at what we get
+
+![](media/picked-balls.png)
+
+
+We have picked, at random, 8 grey balls. 
+
+Using simulations, we can repeat the process and look at how many grey we get. The distribution of the data shows what the most-likely values are
+
+```{r echo=FALSE}
+#see ?rhyper for argument definition
+trials <- rhyper(10000,40,10,12)
+hist(trials,xlab = "Number of grey balls")
+```
+
+We can count how many times each value is observed
+
+```{r echo=FALSE}
+table(trials)
+```
+
+Dividing by the number of trials gives a probability of sorts
+
+```{r echo=FALSE}
+table(trials)/10000
+
+```
+
+The probability of getting *at least* a certain number can also be computed
+
+```{r echo=FALSE}
+cumsum(table(trials)/10000)
+
+```
+
+Back to our example, the distribution of balls (both grey and red) can be expressed as a contingency table, on which we can use a "*Fisher's exact test*".
+
+Total grey balls: 10
+Total in subset: 12
+
+```{r echo=FALSE} 
+df <- data.frame(Selected = c(8,4), NotSelected = c(2,26))
+rownames(df) <- c("Grey", "Red")
+df
+```
+
+
+
+```{r echo=FALSE}
+df <- data.frame(Selected = c("a","c","a+c"), NotSelected = c("b","d","b+d"), RowTotal = c("a +b","c+d","a+b+c+d (=n)"))
+rownames(df) <- c("Grey", "Red","Column Total")
+df
+```
+
+The formula for Fishers exact test is;
+
+$$ p = \frac{\binom{a + b}{a}\binom{c +d}{c}}{\binom{n}{a +c}} = \frac{(a+b)!(c+d)!(a+c)!(b+d)!}{a!b!c!d!n!} $$
+
+or less formally;
+
+*P = (ways of choosing grey balls) X (ways of non-grey balls amongst subset) / ways of choosing subset*
+
+
+
+
+
+## Practical Example: 
+
+We will use the example of 5 breast cancer patients and 5 normals that we performed differential expression on using the degust tool.
+
+The first step is to create a list of *background* genes for the test. ***You can do this step in Excel if you find it easier***. Below are the instructions for Galaxy.
+
+<div class="alert alert-info">
+**Text Manipulation** -> **Cut columns from a table**
+Type `c1` only in the Cut columns text box
+</div>
+
+- Download the results file from Degust as a ***tsv*** file, and upload them to Galaxy
+- Select the Type of data as *Tabular* when uploading the file
+- Cut the column c1 from `degust.tsv` in your Galaxy history
+- Download the resulting object and rename to `background.txt`
+
+
+<div class="alert alert-info">
+**Filter and Sort** -> **Filter:** 
+</div>
+
+Now use the tool **Filter and Sort** -> **Filter:** to select only the significant genes
+
+
+- Filter: Your Degust results file
+- With following condition: c4 < 0.05 and (c3 > 1.0 or c3 < -1.0)
+- Number of header lines to skip: 1
+
+<div class="alert alert-info">
+**Text Manipulation** -> **Cut**
+</div>
+
+- use the **Text Manipulation** -> **Cut** command to create a table containing just the names of the differentially-expressed genes. 
+- download the table to `de_genes.txt`
+
+
+
+## Using GOrilla
+
+There are several popular online tools for performing enrichment analysis
+
+We will be using the online tool [GOrilla](http://cbl-gorilla.cs.technion.ac.il/) to perform the pathways analysis. It has two modes; the first of which accepts a list of *background* and *target* genes
+
+
+1. Go to http://cbl-gorilla.cs.technion.ac.il/
+2. Read the “Running Example”
+
+![](media/gorilla-example.png)
+
+3. Choose Organism: `Homo sapiens`
+4. Choose running mode: `Two unranked lists of genes`
+5. Upload `de_genes.txt` as the Target set.
+6. Upload `background.txt` as the Background set.
+7. Choose an Ontology: `Process`
+8. `Search Enriched GO terms`
+
+You should be presented with a graph of enriched GO terms showing the relationship between the terms. Each GO term is coloured according to its statistical significance.
+
+Below the figure is the results table. This links to more information about each GO term, and lists each gene in the category that was found in your list. The enrichment column gives 4 numbers that are used to determine enrichment (similar to the Fisher exact test we saw earlier)
+
+- N, total number of genes (should be the same in all rows)
+- B, total number of genes annotated with the GO term
+- n, total number of genes that were found in the list you uploaded (same for all rows)
+- b, number of genes in the list you uploaded that intersect with this GO term
+
+If you have time, you can also experiment uploading the same genes lists to the online tools [DAVID](https://david.ncifcrf.gov/tools.jsp) and [GeneTrail](https://genetrail2.bioinf.uni-sb.de/)
+
+
+## Using EnrichR
+
+<div class="alert alert-warning">
+**Question:** [EnrichR](http://amp.pharm.mssm.edu/Enrichr/) is another online tool for performing enrichment analysis against a large collection of databases. Go to the website, and paste-in your list of differentially-expressed genes. Explore the results that EnrichR provides
+
+</div>
+
+## Theory Part II: Threshold-free
+
+For these tests, we don't have to specify a statistical threshold and use the test statistics (log fold-change) from *all* genes as the input to the test. The popular *Gene Set Enrichment Analysis (GSEA)* uses this approach. These tests can be used to detect differential expression for a group of genes, even when the effects are too small or there is too little data to detect the genes individually.
+
+![](media/overexpressed-gsea.png)
+
+
+The Broad institute provides [a version of GSEA](http://software.broadinstitute.org/gsea/index.jsp) that can be run via a java application. 
+
+Remember that this method requires a sorted list of genes, so we will use a tool within Galaxy to sort our Degust results by log fold change
+
+<div class="alert alert-info">
+**Filter and Sort** -> **Sort**
+</div>
+
+- Use **Filter and Sort** -> **Sort** to sort the `degust.tsv` on the column containing the log fold change
+- The use the **Text Manipulation** -> **Cut** tool to cut columns `c1` and `c3` from the output.
+- Use the **Filter and Sort** -> **Filter** tool to remove the first line of the table. GSEA expects the second column to contain only *numeric* data, so will have problems if we leave this row in the input file. Use the following as the condition to filter
+    + `c1 != 'Gene'`
+- Download the resulting table, and once downloaded **rename to `gsea_input.rnk`**
+
+<div class="alert alert-info">
+It may seem tedious at first to apply these operations in Galaxy when we could do them in Excel. However, the advantage of Galaxy is that we have an audit trail of the operations that we applied to a file. Moreover, some of the advanced features of Galaxy allow us to create workflows from a chain of tools. These workflows can be applied to other files in the future.
+</div>
+
+
+## Run the GSEAPreranked tool
+
+You should have already downloaded the gsea java tool from the Broad website. Double-clicking on the file `gsea-3.0.jar` should load the tool
+
+<div class="alert alert-info">
+If you have problems running GSEA.jar, you may need to download an updated version of Java
+
+https://java.com/download
+
+</div>
+
+
+<div class="alert alert-info">
+If you have problems importing the file `gsea_input.rnk`, check (by loading the file into a text editor or Excel) that the 2nd column does not contain the Word `Tumour` or `Normal` in it. If so, delete this row of data and re-save the file.
+
+You can download [this file](gsea_input.rnk) if you get into difficulties
+</div>
+
+- Load the file you have just created into the tool by clicking the *Load data* button
+- Select the *GSEAPreranked* option from tools
+- You will need to choose what set of genes to use in the analysis. There are many curated gene sets available through [msigDB](http://software.broadinstitute.org/gsea/msigdb)
+- We will use the Hallmark gene sets, but feel free to experiment with others
+
+> hallmark gene sets are coherently expressed signatures derived by aggregating many MSigDB gene sets to represent well-defined biological states or processes.
+
+- Click the *Run* icon at the bottom of the screen
+- The bottom-left panel of the GSEA screen should show the progress of the tool as it runs. Once *success** is displayed, you will be able to view the results
+    + these should be stored in your home directory, or via the *Analysis History* button on the left of the main screen
+- The files `gsea_report_for_..._neg_.....` and `gsea_report_for_...._pos_....` show reports for gene sets that are under- and over-expressed in the study (according to the direction of the log fold-change).
+
+<div class="alert alert-warning">
+**Question:** What are the most enriched pathways? Locate their enrichment plots in the results folder. Make sure that you can understand the plots.
+
+Re-run for other gene sets that you think could be of interest
+</div>
+
+## Other Useful Tools
+
+## Adding extra annotation to results
+
+The results from degust have gene symbols in the first column, but no other useful annotation. Sometimes we might want other IDs to be added in order to interpret our results. Individual queries can be made online (e.g. Ensembl, biomart) but tedious for large numbers of genes. The Galaxy tool **annotateMyIDs** is a simple tool for annotating a file containing a column of IDs.
+
+<div class="alert alert-info">
+**Annotation** -> **annotateMyIDs**
+</div>
+
+- File with IDs: degust.tsv
+- Organism: Human
+- ID Type: Gene Symbol
+
+The output can then be *joined* to the original results file to produce a more detailed result
+
+<div class="alert alert-info">
+**Text Manipulation** -> **Join two files**
+</div>
+
+- 1st file: degust.tsv
+- Column to use from 1st file: Column 1
+- 2nd file: result from *annotateMyIDs*
+- Column to use from 2nd file: Column 1
+
+
