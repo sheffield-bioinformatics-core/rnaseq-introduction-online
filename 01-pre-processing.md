@@ -636,6 +636,22 @@ Additional QC of the aligned reads can be obtained with the Qualimap tool. This 
 **RNA-Seq > Qualimap RNA-Seq QC**
 </div>
 
+### Create a count matrix
+
+The htseq tool is designed to produce a separate table of counts for each sample. This is not particularly useful for other tools such as Degust (used in the next section) which require the counts to be presented in a data matrix where each row is a gene and each column is a particular sample in the dataset.
+
+<div class="alert alert-info">
+*Collection Operations -> Column Join* on Collections
+</div>
+
+- In the *Tabular Files* section, select the `ht-seq` count files from your history *batch1.htseq*, *batch2.htseq*, etc... Holding the CTRL key allows multiple files to be selected
+- Keep *Identifier column* as `1`
+
+The output should look something like this...
+![](media/count_matrix.png)
+
+- Download to your computer
+
 **You are now ready to follow the next tutorial on [Differential Expression](02-differential-expression.nb.html)**
 
 
