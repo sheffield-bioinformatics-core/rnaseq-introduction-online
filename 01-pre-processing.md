@@ -654,6 +654,57 @@ The output should look something like this...
 
 **You are now ready to follow the next tutorial on [Differential Expression](02-differential-expression.nb.html)**
 
+# Pratice Data
+
+If you want some more data to practice, we have made some fastq files available via a google drive
+
+https://drive.google.com/open?id=1eyM1kJ1h9KsnkjeClCZefNmYPVpRkleA
+
+The data for this tutorial comes from a Nature Cell Biology paper, [*EGF-mediated induction of Mcl-1 at the switch to lactation is essential for alveolar cell survival*](http://www.ncbi.nlm.nih.gov/pubmed/25730472) [@Fu2015]. 
+
+This study examines the expression profiles of basal stem-cell enriched cells (B) and committed luminal cells (L) in the mammary gland of virgin, pregnant and lactating mice. Six groups are present, with one for each combination of cell type and mouse status. Each group contains two biological replicates.
+
+The full experimental design is as follows:-
+
+Run  | Name | CellType | Status
+------------- | ------------- | ------------- | -------------  
+SRR1552444 | MCL1-LA | basal | virgin
+SRR1552445 | MCL1-LB | luminal | virgin
+SRR1552446 | MCL1-LC | Luminal | pregnancy
+SRR1552447 | MCL1-LD | Luminal | pregnancy
+SRR1552448 | MCL1-LE | luminal | lactation
+SRR1552449 | MCL1-LF | luminal | lactation
+SRR1552450 | MCL1-DG | basal | virgin
+SRR1552451 | MCL1-DH | luminal | virgin
+SRR1552452 | MCL1-DI | basal | pregnancy
+SRR1552453 | MCL1-DJ | basal | pregnancy
+SRR1552454 | MCL1-DK | basal | lactation
+SRR1552455 | MCL1-DL | basal | lactation
+
+Take the two files from the basal-virgin condition. 
+
+`SRR1552444.fastq.gz`
+`SRR1552450.fastq.gz`
+
+and these two files from the basal pregnant condition.
+
+`SRR1552452.fastq.gz`
+`SRR1552453.fastq.gz`
+
+and perform the steps from our workflow
+
+- QC with fastQC and multiqc
+- Alignment against the **mm10** genome with HiSat2
+- Use these settings to obtain an annotation file in UCSC
+  - Set *clade* to **Mammal**
+  - Set *genome* to **Mouse**
+  - *assembly* **Dec.2011 (GRCm38/mm10)**
+  - *group* **Genes and Gene Prediction**
+  - *track* **NCBI RefSeq**
+  - *region* **genome**
+  - *output format* **GTF - gene transfer format (limited)** and *send output to* **Galaxy**
+- Counting with htseq 
+- Construct a count matrix containg counts from all samples
 
 
 ## References

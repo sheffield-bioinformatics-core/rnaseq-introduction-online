@@ -147,38 +147,17 @@ or less formally;
 
 We will use the example of 5 breast cancer patients and 5 normals that we performed differential expression on using the degust tool.
 
-The first step is to create a list of *background* genes for the test. ***You can do this step in Excel if you find it easier***. Below are the instructions for Galaxy.
+The first step is to create a list of *background* genes for the test from Degust. 
 
-<div class="alert alert-info">
-**Text Manipulation** -> **Cut columns from a table**
-Type `c1` only in the Cut columns text box
-</div>
+- Make sure that the **FDR cut-off** option is set to 1
+- The abs logFC option is set to **0**
+- Now Download the genes table as a *csv*
 
-- Download the results file from Degust as a ***tsv*** file, and upload them to Galaxy
-- Select the Type of data as *Tabular* when uploading the file
-- Cut the column c1 from `degust.tsv` in your Galaxy history
-- Download the resulting object and rename to `background.txt`
+We will also need to export the list of differentially-expressed genes
 
-
-<div class="alert alert-info">
-**Filter and Sort** -> **Filter:** 
-</div>
-
-Now use the tool **Filter and Sort** -> **Filter:** to select only the significant genes
-
-
-- Filter: Your Degust results file
-- With following condition: c4 < 0.05 and (c3 > 1.0 or c3 < -1.0)
-- Number of header lines to skip: 1
-
-<div class="alert alert-info">
-**Text Manipulation** -> **Cut**
-</div>
-
-- use the **Text Manipulation** -> **Cut** command to create a table containing just the names of the differentially-expressed genes. 
-- download the table to `de_genes.txt`
-
-
+- Set the **FDR cut-off** to 0.05
+- Set the **abs logFC** cut-off to 1
+- Download the genes table as a csv
 
 ## Using GOrilla
 
@@ -194,8 +173,8 @@ We will be using the online tool [GOrilla](http://cbl-gorilla.cs.technion.ac.il/
 
 3. Choose Organism: `Homo sapiens`
 4. Choose running mode: `Two unranked lists of genes`
-5. Upload `de_genes.txt` as the Target set.
-6. Upload `background.txt` as the Background set.
+5. Copy the names of your DE genes as the Target set.
+6. Copy the names from  as the Background set.
 7. Choose an Ontology: `Process`
 8. `Search Enriched GO terms`
 
