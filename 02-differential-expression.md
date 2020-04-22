@@ -59,7 +59,7 @@ Previous sections have illustrated how to
 - [visualise the reads in IGV](01-pre-processing.nb.html#section_4_visualise_the_aligned_reads_with_igv)
 - [count against a set of reference transcripts](01-pre-processing.nb.html#section_5_quantification_(counting_reads_in_features))
 
-We will now use the counts as the input for a differential expression analysis. **We will use two different methods for assessing differential expression; one implemented in Galaxy, and one implemented in an interactive web tool. We will then compare the results. In practice, you only need use one of these methods. Both should perform equally well**.
+We will now use the counts as the input for a differential expression analysis. If you didn't manage to create one, you can download one from [this link](sacCer3_counts.txt)
 
 ## Differential expression
 
@@ -186,7 +186,7 @@ We are going to use some more realistic data to practice running a differential 
 
 The data are from the The Cancer Genome Atlas (TCGA) project and comprise the RNA-seq counts from 5 breast cancer patients and 5 healthy individuals.
 
-The data for this exercise can be downloaded using [this link](https://raw.githubusercontent.com/sheffield-bioinformatics-core/rna-seq-in-galaxy/gh-pages/tcga_raw_counts.csv)
+The data for this exercise can be downloaded using [this link](tcga_raw_counts.csv)
 
 <div class="alert alert-warning">
 **Question**: Upload the file `tcga_raw_counts,csv` to degust and perform a differential expression analysis
@@ -209,7 +209,7 @@ You are now ready to complete the file section on [pathways and enrichment analy
 <br>
 <br>
 
-<font size="4">***We will not go through the following section in the workshop, but feel free to work through in your own time***</font>
+<font size="4">***We will not go through the following section in the workshop, but feel free to work through in your own time in Galaxy***</font>
 
 # (Optional) Assessing Differential Expression with *DESeq2*
 
