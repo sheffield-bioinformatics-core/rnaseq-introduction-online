@@ -206,33 +206,17 @@ For these tests, we don't have to specify a statistical threshold and use the te
 
 The Broad institute provides [a version of GSEA](http://software.broadinstitute.org/gsea/index.jsp) that can be run via a java application. 
 
-Remember that this method requires a sorted list of genes, so we will use a tool within Galaxy to sort our Degust results by log fold change
+Remember that this method requires a sorted list of genes, so we will use Excel to sort our Degust results by log fold change. **This has to be the file containing all genes**.
 
-<div class="alert alert-info">
-**Filter and Sort** -> **Sort**
-</div>
-
-- Use **Filter and Sort** -> **Sort** to sort the `degust.tsv` on the column containing the log fold change
-- The use the **Text Manipulation** -> **Cut** tool to cut columns `c1` and `c3` from the output.
-- Use the **Filter and Sort** -> **Filter** tool to remove the first line of the table. GSEA expects the second column to contain only *numeric* data, so will have problems if we leave this row in the input file. Use the following as the condition to filter
-    + `c1 != 'Gene'`
-- Download the resulting table, and once downloaded **rename to `gsea_input.rnk`**
-
-<div class="alert alert-info">
-It may seem tedious at first to apply these operations in Galaxy when we could do them in Excel. However, the advantage of Galaxy is that we have an audit trail of the operations that we applied to a file. Moreover, some of the advanced features of Galaxy allow us to create workflows from a chain of tools. These workflows can be applied to other files in the future.
-</div>
+- Sort the file by the *Tumour* column
+- Remove all columns apart from *Gene* and *Tumour*
+- Remove the column headings
+- Save as a *tab-delimited* file with the name *gsea_input.rnk*
 
 
 ## Run the GSEAPreranked tool
 
-You should have already downloaded the gsea java tool from the Broad website. Double-clicking on the file `gsea-3.0.jar` should load the tool
-
-<div class="alert alert-info">
-If you have problems running GSEA.jar, you may need to download an updated version of Java
-
-https://java.com/download
-
-</div>
+You should have already downloaded the GSEA app
 
 
 <div class="alert alert-info">
@@ -248,6 +232,7 @@ You can download [this file](gsea_input.rnk) if you get into difficulties
 
 > hallmark gene sets are coherently expressed signatures derived by aggregating many MSigDB gene sets to represent well-defined biological states or processes.
 
+- Make sure the *Collapse/Remap to gene symbols* drop-down is set to *No_Collapse*
 - Click the *Run* icon at the bottom of the screen
 - The bottom-left panel of the GSEA screen should show the progress of the tool as it runs. Once *success** is displayed, you will be able to view the results
     + these should be stored in your home directory, or via the *Analysis History* button on the left of the main screen
