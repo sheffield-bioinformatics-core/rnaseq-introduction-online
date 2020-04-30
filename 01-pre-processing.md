@@ -471,7 +471,7 @@ make sure **Which tool was used to generate logs** is set to **Samtools** and se
 </div>
 
 
-## Section 4.  Visualise the aligned reads with IGV
+## (Opional) Section 4.  Visualise the aligned reads with IGV
 
 Download the bam files you have created in the previous step by clicking the disk icon on the right-hand panel. Make sure to click both the **Download dataset** and **Download index** buttons. We will now visualise the alignments using the Integrative Genomics Viewer (IGV).
 
@@ -590,7 +590,7 @@ To obtain the coordinates of each gene, we can use the UCSC genome browser which
 
 ![](media/ucsc_browser.png)
 
-Selecting the **UCSC Main** tool from Galaxy will take you to the UCSC table browser. From here we can extract gene coordinates for our genome of interest (`sacCer3`) in `gtf` format for processing with galaxy.
+Selecting the **UCSC Main** tool from Galaxy will take you to the UCSC table browser. From here we can extract gene coordinates for our genome of interest (`mm10`) in `gtf` format for processing with galaxy.
 
 - Set *clade* to **Mammal**
 - Set *genome* to **Mouse**
