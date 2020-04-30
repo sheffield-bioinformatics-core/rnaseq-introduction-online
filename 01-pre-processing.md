@@ -56,39 +56,52 @@ Those eventually wanted to perform their own RNA-seq analysis (for example in R)
 ## Background
 
 #### Where do the data in this tutorial come from?
-The data for this tutorial is from the paper, *A comprehensive comparison of
-RNA-Seq-based transcriptome analysis from reads to differential gene expression
-and cross-comparison with microarrays: a case study in Saccharomyces
-cerevisiae* by Nookaew et al. [1] which studies S.cerevisiae strain CEN.PK
-113-7D (yeast) under two different metabolic conditions: glucose-excess (batch)
-or glucose-limited (chemostat).
+The data for this tutorial comes from a Nature Cell Biology paper, [*EGF-mediated induction of Mcl-1 at the switch to lactation is essential for alveolar cell survival*](http://www.ncbi.nlm.nih.gov/pubmed/25730472) [@Fu2015]. 
 
-The RNA-Seq data has been uploaded in NCBI, short read archive (SRA), with
-accession SRS307298. There are 6 samples in total-- two treatments with
-three biological replicates each sequenced paired-end.  We have selected only
-the first read, and only two replicates of each condition to keep the data small
-for this workshop.
+This study examines the expression profiles of basal stem-cell enriched cells (B) and committed luminal cells (L) in the mammary gland of virgin, pregnant and lactating mice. Six groups are present, with one for each combination of cell type and mouse status. Each group contains two biological replicates.
 
-We have extracted chromosome I reads from the samples to make the
-tutorial a suitable length. 
+The full experimental design is as follows:-
+
+Run  | Name | CellType | Status
+------------- | ------------- | ------------- | -------------  
+SRR1552444 | MCL1-LA | basal | virgin
+SRR1552445 | MCL1-LB | luminal | virgin
+SRR1552446 | MCL1-LC | Luminal | pregnancy
+SRR1552447 | MCL1-LD | Luminal | pregnancy
+SRR1552448 | MCL1-LE | luminal | lactation
+SRR1552449 | MCL1-LF | luminal | lactation
+SRR1552450 | MCL1-DG | basal | virgin
+SRR1552451 | MCL1-DH | luminal | virgin
+SRR1552452 | MCL1-DI | basal | pregnancy
+SRR1552453 | MCL1-DJ | basal | pregnancy
+SRR1552454 | MCL1-DK | basal | lactation
+SRR1552455 | MCL1-DL | basal | lactation
+
 
 
 For this tutorial, we will assume that the *wet-lab* stages of the experiment have been performed and we are now in the right-hand branch of the workflow. In this tutorial we will demonstrate the steps of **Quality assessment**, **alignment**, **quantification** and **differential expression testing**.
 
+The *summarised* data for this experiment were made available on the Gene Expression Omnibus with accession [GSE60450](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450), and full raw data can be obtained via the [SRA run browser](https://trace.ncbi.nlm.nih.gov/Traces/study/?acc=SRP045534&o=acc_s%3Aa). **For the purposes of this workshop we have created a downsampled dataset**
 
 ## Section 1: Preparation
 #### 1. Sign-up to the European Galaxy server
 
-- **If you are joining this course in-person, you will be given a link to access a reserved queue on Galaxy. Go to this URL now**
-- Otherwise, go to the public Galaxy instance
-  + [https://usegalaxy.eu/](https://usegalaxy.eu/)
+
+- https://usegalaxy.eu
+- If attending this course "live" you will be given a link to join a reserved queue on the European Galaxy server
 
 
 **Make sure you check your email to activate your account**
 
-#### 2.  Import the RNA-seq data for the workshop.
+#### 2. Download the course data
 
-We can going to import the [*fastq* files](https://en.wikipedia.org/wiki/FASTQ_format) for this experiment. This is a standard format for storing raw sequencing reads and their associated quality scores. 
+The data for this course have all been shared on a google drive. If you have not done so already, please download this directory as a zip file
+
+https://drive.google.com/open?id=1ftuBP5L-rcXwsEub2mIaSDJ1tceHYFc7
+
+#### 3.  Import the RNA-seq data for the workshop.
+
+We can going to import the [*fastq* files](https://en.wikipedia.org/wiki/FASTQ_format) for this experiment. This is a standard format for storing raw sequencing reads and their associated quality scores. To make the practical quicker, we have *downsampled* the original fastq files to half a million reads.
 
 
 <div class="alert alert-info">
@@ -100,39 +113,27 @@ We can going to import the [*fastq* files](https://en.wikipedia.org/wiki/FASTQ_f
 You can import the data by:
 
 1.  In the tool panel located on the left, under Basic Tools select **Get
-    Data > Upload File**. Click on the **Paste/Fetch data** button on the
+    Data > Upload File**. Click on the **Choose local file* button on the
     bottom section of the pop-up window.
-2.  Upload the sequence data by pasting the following links into the text
-    input area.
-    These two files are single-end samples from the batch condition
-    (glucose-excess). 
+2.  Navigate to the `fastq` directory of the zip file that you downloaded from google drive
+    There are two files are single-end samples from the basal-virgin condition. 
 
-    <div class="code">
-    https://swift.rc.nectar.org.au:8888/v1/AUTH_a3929895f9e94089ad042c9900e1ee82/RNAseqDGE_ADVNCD/batch1_chrI_1.fastq
-    <br>
-    https://swift.rc.nectar.org.au:8888/v1/AUTH_a3929895f9e94089ad042c9900e1ee82/RNAseqDGE_ADVNCD/batch2_chrI_1.fastq
-    <br>
-    </div>
+`SRR1552444.fastq.gz`
+`SRR1552450.fastq.gz`
+ 
+ and these two files are single-end samples from the basal pregnant condition.
 
-    These two files are single-end samples from the chem condition
-    (glucose-limited). 
-
-    <div class="code">
-    https://swift.rc.nectar.org.au:8888/v1/AUTH_a3929895f9e94089ad042c9900e1ee82/RNAseqDGE_ADVNCD/chem1_chrI_1.fastq
-    <br>
-    https://swift.rc.nectar.org.au:8888/v1/AUTH_a3929895f9e94089ad042c9900e1ee82/RNAseqDGE_ADVNCD/chem2_chrI_1.fastq
-    <br>
-    </div>
+`SRR1552452.fastq.gz`
+`SRR1552453.fastq.gz`
+</div>
 
 3.  You should now have these 4 files in your history:
-    - `batch1_chrI_1.fastq`
-    - `batch2_chrI_1.fastq`
-    - `chem1_chrI_1.fastq`
-    - `chem2_chrI_1.fastq`
+    - `SRR1552444.fastq.gz`
+    - `SRR1552450.fastq.gz`
+    - `SRR1552452.fastq.gz`
+    - `SRR1552453.fastq.gz`
 
-    These files can be renamed by clicking the **pen icon** if you wish.
 
-    **Note:** Low quality reads have already been trimmed.
 
 Each read is described by 4 lines in the file:-
 
@@ -186,7 +187,6 @@ In practice, we don't have to convert the values as we have software that will d
 - When the tool finishes running, you should have an HTML file in your History. Click on the eye icon to view the various quality metrics.
 - Run Fastqc on the remaing fastq files, but don't examine the results just yet.
 
-<img src="media/fastqc.png" height=700px>
 
 <div class="alert alert-warning">
 
@@ -239,7 +239,7 @@ Under *Which tool was used generate logs?* Choose *fastqc* and select the RawDat
 
 <div class="alert alert-warning">
 
-Question: Repeat the FastQC analysis for the remaining fastq files (`batch2.fastq`, `chem1.fastq`, `chem2.fastq`) and combine the reports with `multiQC`. Do the fastq files seem to have consistently high-quality?
+Question: Repeat the FastQC analysis for the remaining fastq files and combine the reports with `multiQC`. Do the fastq files seem to have consistently high-quality?
 </div>
 
 
@@ -252,7 +252,6 @@ mapper for RNA-seq reads that is based on Bowtie. It uses the mapping results
 from Bowtie to identify splice junctions between exons. More information on
 HISAT2 can be found [here](https://ccb.jhu.edu/software/hisat2/index.shtml).
 
-<img src="media/HISAT-options.png" height=700px>
 
 <div class="alert alert-info">
 
@@ -262,7 +261,7 @@ Mapping -> HISAT2
 
 
 
-#### 1.  Map/align the reads with HISAT2 to the S. cerevisiae reference
+#### 1.  Map/align the reads with HISAT2 to the mm10 reference genome
 In the left tool panel menu, under NGS Analysis, select
 **Mapping > HISAT2** and set the parameters as follows:  
 
@@ -270,15 +269,14 @@ In the left tool panel menu, under NGS Analysis, select
 - **FASTQ file**  
 (Click on the multiple datasets icon and select all four of the
 FASTQ files)
-    - `batch1_chrI_1.fastq`
-    - `batch2_chrI_1.fastq`
-    - `chem1_chrI_1.fastq`
-    - `chem2_chrI_1.fastq`
+    - `SRR1552444.fastq.gz`
+    - `SRR1552450.fastq.gz`
+    - `SRR1552452.fastq.gz`
+    - `SRR1552453.fastq.gz`
 
 - **Source for the reference genome** Use
 built-in genome
-- **Select a reference genome:** S. cerevisiae Apr. 2011 (SaccCer_Apr2011/sacCer3)
-(sacCer3)
+- **Select a reference genome:** Mouse (Mus Musculus): mm10
 - Use defaults for the other fields
 - Execute
 
@@ -294,16 +292,20 @@ You should have 5 output files for each of the FASTQ input files:
 
 It will be helpful to rename these to something shorter for the next steps.
 
-- `batch1.bam`
-- `batch2.bam`
-- `chem1.bam`
-- `chem2.bam`
+- `SRR1552444.bam`
+- `SRR1552450.bam`
+- `SRR1552452.bam`
+- `SRR1552453.bam`
 
+<div class="alert alert-info">
+
+If this step is taking too long, there is an aligned bam file present in the google drive link. You can use this in the following steps of the tutorial.
+
+</div>
 
 <div class="alert alert-info">
 
 *STAR* is also another popular option for aligned RNA-seq reads. We won't cover this today, or the relative merits of different methods. If you want to try STAR in your own time you can find it under.
-
 
 
 <div class="alert alert-info">
@@ -311,8 +313,6 @@ It will be helpful to rename these to something shorter for the next steps.
 Mapping -> RNA STAR
 
 </div>
-
-N.B. at the moment the STAR tool will only work with certain genomes (saCer11 is not one of them) without having to upload a reference genome and reference gtf file.
 
 ## About the aligned read format
 
@@ -323,10 +323,9 @@ The first part of the header lists the names (`SN`) of the sequences (chromosome
 
 ```
 @HD VN:1.0 SO:coordinate
-@SQ SN:chrI LN:230218
-@SQ SN:chrII LN:813184
-@SQ SN:chrIII LN:316620
-@SQ SN:chrIV LN:1531933
+@SQ SN:chr1 LN:195471971
+@SQ SN:chr10 LN:130694993
+@SQ SN:chr11 LN:122082543
 .....
 .....
 
@@ -349,7 +348,7 @@ If mutliple samples were present in the file (i.e. the samples have been *multip
 
 Finally, we have a section where we can record the processing steps used to derive the file. This is 
 ```
-@PG ID:hisat2 PN:hisat2 VN:2.1.0 CL:"/usr/local/tools/_conda/envs/mulled-v1-e7321ba46fa5ea4c6b9a06b78e6cd5182b33c0a47c2c86b5d610e1361f8b1686/bin/hisat2-align-s --wrapper basic-0 -p 1 -x /data/db/data_managers/sacCer3/hisat2_index/sacCer3/sacCer3 -U input_f.fastq"
+@PG ID:hisat2 PN:hisat2 VN:2.1.0 CL:"/mnt/pulsar/dependencies/_conda/envs/mulled-v1-e7321ba46fa5ea4c6b9a06b78e6cd5182b33c0a47c2c86b5d610e1361f8b1686/bin/hisat2-align-s --wrapper basic-0 -p 4 -x /cvmfs/data.galaxyproject.org/managed/hisat2_index/mm10/mm10 -U /tmp/16282.unp"
 ....
 ....
 
@@ -358,8 +357,9 @@ Finally, we have a section where we can record the processing steps used to deri
 Next is a *tab-delimited* section that describes the alignment of each sequence in detail. 
 
 ```
-SRR453566.14193/1	272	chrI	12258	1	101M	*	0	0	TGTGGTTTGCTCTGTTGTCCCCTTGGTTTGCTTTGTTGTCTCCGTAGTTTGCTTTGTTATCTCTGTGGTAGAAATAGGGCACCATGTGGTATACTCTGTTG	DDDDBCDDDDDDDDDDDDDDDCDDDFFFFHHGHHJJIJIJJJJJJJIJJJJJJJJJJJJJJJJJJIJJJJJJJJIJJJIIHJJJJJJJHHHHHFFFFFCCC	AS:i:0 ZS:i:0 XN:i:0 XM:i:0 XO:i:0 XG:i:0 NM:i:0 MD:Z:101 YT:Z:UU NH:i:2
-SRR453566.3957305/1	16	chrI	12374	1	1S100M	*	0	0	ATAACGGTGGCCGTGGAAACAATCGCAGAGGAGATGGATTCAGTGCACACATGAGATTCGCAGGATGTCACGGTAACCAAAGTGGTTTGTTCGCTCGTTTT	A?<858(5@<5(>DCCCCC??9DBCCCCDDDDDDDDCECEEEFFFEFFEHHHHHHJJJJJJJJJJIJJJJJJJJJJJJJJJJJJJJJJHHHHHFFFFFCCC	AS:i:-6 ZS:i:-6 XN:i:0 XM:i:1 XO:i:0 XG:i:0 NM:i:1 MD:Z:22T77 YT:Z:UU NH:i:2
+SRR1552450.220289	0	chr1	3200839	60	100M	*	0	0	GGCTCACCAAGTATGATGGTTTCATACCCAGAAAAACATTTGTTCTTTTGGATGCCATTAGTTCAGCCAGTGTCAACATGACTAGTGGTTTCCCAAGCAC	CCCFFFFDHHGDHGIIJJJIHGHGGIGHIIIGFHGHBIIHIJAGIJIJJGGCHJJIGIJJJGHCAGGHHIICGGHHHHHHFFFFFDCE;?AACCDCDDDC	AS:i:0 XN:i:0 XM:i:0 XO:i:0 XG:i:0 NM:i:0 MD:Z:100 YT:Z:UU NH:i:1
+SRR1552450.138797	16	chr1	3201132	60	100M	*	0	0	CATTTTTAACAGCATATTTGTCTTAGCTTTAAATCCAGAGTACTGTTTGGCTTCAAAGAAGATAGTCATCTCTGGTTCTCTTACTGAGAATAGAAAGTCT	DDEEEEEEEFFFFFFFHHHHHIIGCHGEJJJJJJJJJJIJJJJJJJJJJJJIJIJJJJJJJJJJJJIGJJJJJIJJJJJJJIHJJJJHHHHHFFFFFCCC	AS:i:0 XN:i:0 XM:i:0 XO:i:0 XG:i:0 NM:i:0 MD:Z:100 YT:Z:UU NH:i:1
+
 ```
 
 The first 11 columns of each line have an official specification
@@ -530,7 +530,7 @@ For more details
 Go to ***File*** -> ***Load from file*** and select the aligned `bam` files from `HISAT2`. Note that the index files `.bai` need to be present in the same directory. However, you only need to click on the `.bam`
 
 <div class="alert alert-info">
-Make sure that the genome selected is `sacCer3`. The default wil be human hg19
+Make sure that the genome selected is `mm10`. The default wil be human hg19
 </div>
 
 - The black dotted vertical lines indicates the centre of the view
@@ -559,14 +559,6 @@ The reads themselves can also be coloured according to
   - read strand
   - sample
 
-Enter the genomic location `chrI:17,214-25,769` in the genome navigation box. You should see a region at the start of chromosome `I`. 
-  
-![](media/genome_nav.png)
-
-
-<div class="alert alert-warning">
-**Question:** Inspect the coverage of genes `YAL054C` and `YAR028W`. Do you see any evidence for them being up- or down-regulated in the experiment?
-</div>
 
 ## Section 5. Quantification (Counting reads in features)
 
@@ -600,11 +592,11 @@ To obtain the coordinates of each gene, we can use the UCSC genome browser which
 
 Selecting the **UCSC Main** tool from Galaxy will take you to the UCSC table browser. From here we can extract gene coordinates for our genome of interest (`sacCer3`) in `gtf` format for processing with galaxy.
 
-- Set *clade* to **Other**
-- Set *genome* to **S. cerevisiae**
-- *assembly* **Apr. 2011**
+- Set *clade* to **Mammal**
+- Set *genome* to **Mouse**
+- *assembly* **Dec.2011 (GRCm38/mm10)**
 - *group* **Genes and Gene Prediction**
-- *track* **SGD Genes**
+- *track* **UCSC RefSeq**
 - *region* **genome**
 - *output format* **GTF - gene transfer format (limited)** and *send output to* **Galaxy**
 
@@ -621,8 +613,7 @@ Click *get output* and *send query to Galaxy* to be returned to Galaxy. A new jo
     **NGS Analysis > htseq-count** and set the parameters as follows:  
     - **Aligned SAM/BAM file**  
       (Select one of four bam files, or all four using the multiple datasets option)
-        - `batch1.bam`
-    - **GFF file** UCSC Main on S. cerevisiae:ncbiRefSeq (genome)
+    - **GFF file** UCSC Main on Mouse:ncbiRefSeq (genome)
     - Use defaults for the other fields
     - Execute
 2.  Repeat for the remaining bam files if running on each bam separately.
@@ -638,13 +629,13 @@ Additional QC of the aligned reads can be obtained with the Qualimap tool. This 
 
 ### Create a count matrix
 
-The htseq tool is designed to produce a separate table of counts for each sample. This is not particularly useful for other tools such as Degust (used in the next section) which require the counts to be presented in a data matrix where each row is a gene and each column is a particular sample in the dataset.
+The htseq tool is designed to produce a separate table of counts for each sample. This is not particularly useful for other tools such as Degust (see next section) which require the counts to be presented in a data matrix where each row is a gene and each column is a particular sample in the dataset.
 
 <div class="alert alert-info">
 *Collection Operations -> Column Join* on Collections
 </div>
 
-- In the *Tabular Files* section, select the `ht-seq` count files from your history *batch1.htseq*, *batch2.htseq*, etc... Holding the CTRL key allows multiple files to be selected
+- In the *Tabular Files* section, select the `ht-seq` count files from your history *SRR1552444.htseq*, *SRR1552450*, etc... Holding the CTRL key allows multiple files to be selected
 - Keep *Identifier column* as `1`
 
 The output should look something like this...
@@ -652,63 +643,84 @@ The output should look something like this...
 
 - Download to your computer
 
+
 **You are now ready to follow the next tutorial on [Differential Expression](02-differential-expression.nb.html)**
 
-# Pratice Data
+# Adding extra annotation to results
 
-If you want some more data to practice, we have made some fastq files available via a google drive
+The count matrix has *RefSeq ID* in the first column, but no other useful annotation. Sometimes we might want other IDs to be added in order to interpret our results. Individual queries can be made online (e.g. Ensembl, biomart) but tedious for large numbers of genes. The Galaxy tool **annotateMyIDs** is a simple tool for annotating a file containing a column of IDs.
 
-https://drive.google.com/open?id=1eyM1kJ1h9KsnkjeClCZefNmYPVpRkleA
+<div class="alert alert-info">
+**Annotation** -> **annotateMyIDs**
+</div>
 
-The data for this tutorial comes from a Nature Cell Biology paper, [*EGF-mediated induction of Mcl-1 at the switch to lactation is essential for alveolar cell survival*](http://www.ncbi.nlm.nih.gov/pubmed/25730472) [@Fu2015]. 
+- File with IDs: *Column Join on Data...*
+- Organism: Mouse
+- ID Type: RefSeq
+- Keep all other defaults
 
-This study examines the expression profiles of basal stem-cell enriched cells (B) and committed luminal cells (L) in the mammary gland of virgin, pregnant and lactating mice. Six groups are present, with one for each combination of cell type and mouse status. Each group contains two biological replicates.
+This should produce an output table containing the original ID, and the equivlent Gene Symbol, Ensembl ID.
 
-The full experimental design is as follows:-
+The output can then be *joined* to the original results file to produce a more detailed result
 
-Run  | Name | CellType | Status
-------------- | ------------- | ------------- | -------------  
-SRR1552444 | MCL1-LA | basal | virgin
-SRR1552445 | MCL1-LB | luminal | virgin
-SRR1552446 | MCL1-LC | Luminal | pregnancy
-SRR1552447 | MCL1-LD | Luminal | pregnancy
-SRR1552448 | MCL1-LE | luminal | lactation
-SRR1552449 | MCL1-LF | luminal | lactation
-SRR1552450 | MCL1-DG | basal | virgin
-SRR1552451 | MCL1-DH | luminal | virgin
-SRR1552452 | MCL1-DI | basal | pregnancy
-SRR1552453 | MCL1-DJ | basal | pregnancy
-SRR1552454 | MCL1-DK | basal | lactation
-SRR1552455 | MCL1-DL | basal | lactation
+<div class="alert alert-info">
+**Text Manipulation** -> **Join two files**
+</div>
 
-Take the two files from the basal-virgin condition. 
+- 1st file: *Column Join on data....*
+- Column to use from 1st file: Column 1
+- 2nd file: result from *annotateMyIDs on data...*
+- Column to use from 2nd file: Column 1
 
-`SRR1552444.fastq.gz`
-`SRR1552450.fastq.gz`
+<div class="alert alert-info">
+The step of annotating your results may need modifying (or may not be necessary) depending on what IDs you have used in the counting. Make sure you choose the options carefully when using this tool.
+</div>
 
-and these two files from the basal pregnant condition.
+# Extra Practice
 
-`SRR1552452.fastq.gz`
-`SRR1552453.fastq.gz`
+In the folder you downloaded from google drive, you have the fastq files for all other samples in the dataset. Repeat the workflow steps for these remaining files
 
-and perform the steps from our workflow
+- QC with fastQC
+- Alignment against the mm10 genome with HiSat2
+- Counting with htseq
 
-- QC with fastQC and multiqc
-- Alignment against the **mm10** genome with HiSat2
-- Use these settings to obtain an annotation file in UCSC
-  - Set *clade* to **Mammal**
-  - Set *genome* to **Mouse**
-  - *assembly* **Dec.2011 (GRCm38/mm10)**
-  - *group* **Genes and Gene Prediction**
-  - *track* **NCBI RefSeq**
-  - *region* **genome**
-  - *output format* **GTF - gene transfer format (limited)** and *send output to* **Galaxy**
-- Counting with htseq 
-- Construct a count matrix containg counts from all samples
+Create a combined QC report and combined count matrix **for all samples**.
+
+# Optional
+
+<font size="4">***We will not go through the following section in the workshop, but feel free to work through in your own time***</font>
+
+# (Optional) Assessing Differential Expression with *DESeq2*
+
+There are several sensible and respected choices for performing a differential expression analysis on RNA-seq data. Here, we  will illustrate the `DESeq2` method because it is readily available through Galaxy. 
+
+<div class="alert alert-info">
+
+**NGS: RNA Analysis > DESeq2**
+</div>
+
+In the Galaxy tool panel, under NGS Analysis, select
+**NGS: RNA Analysis > DESeq2** and set the parameters as follows:
 
 
-## References
+- **1. Factor level** Virgin
+- **Count files**  
+    - `SRR1552444.htseq`
+    - `SRR1552450.htseq`
+- **2. Factor level:** Pregnant
+- **Select columns containing control:**  
+    - `SRR1552452.htseq`
+    - `SRR1552453.htseq`
+- For **Output normalized counts table** select **Yes**
+- Execute
 
-[1] Nookaew I, Papini M, Pornputtpong N, Scalcinati G, Fagerberg L, Uhlén M, Nielsen J: A comprehensive comparison of RNA-Seq-based transcriptome analysis from reads to differential gene expression and cross-comparison with microarrays: a case study in Saccharomyces cerevisiae. Nucleic Acids Res 2012, 40 (20):10084 – 10097. doi:10.1093/nar/gks804. Epub 2012 Sep 10
+#### 2.  Examine the outputs from the previous step
+1.  Examine the `DeSeq2 result file`by
+    clicking on the **eye icon**.
+    This file is a list of genes sorted by p-value from using DESeq2 to
+    perform differential expression analysis.
+2.  Examine the `DeSeq2 plots` file. This file has some
+    plots from running DESeq2, including [PCA](http://setosa.io/ev/principal-component-analysis/) and clustering.
+    
 
-[2] Guirguis A, Slape C, Failla L, Saw J, Tremblay C, Powell D, Rossello F, Wei A, Strasser A, Curtis D: PUMA promotes apoptosis of hematopoietic progenitors driving leukemic progression in a mouse model of myelodysplasia. Cell Death Differ. 2016 Jun;23(6)
+`DESeq2` reports, for each gene that is being tested, some information that we can use to determine if the gene is different between our conditions of interest. We will do more exploration of differential expression analysis in the next section using a tool that is not included in Galaxy. For now we will concentrate on the task on finding out which genes have *sufficient statistical evidence* for being differentially expressed between our two conditions.

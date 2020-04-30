@@ -59,7 +59,8 @@ Previous sections have illustrated how to
 - [visualise the reads in IGV](01-pre-processing.nb.html#section_4_visualise_the_aligned_reads_with_igv)
 - [count against a set of reference transcripts](01-pre-processing.nb.html#section_5_quantification_(counting_reads_in_features))
 
-We will now use the counts as the input for a differential expression analysis. If you didn't manage to create one, you can download one from [this link](sacCer3_counts.txt)
+We will now use the published counts as the input for a differential expression analysis.
+
 
 ## Differential expression
 
@@ -81,27 +82,57 @@ Such methods were developed on the premise that microarray expression values are
 
 The input file is a count matrix where each row is a measured gene, and each column is a different biological sample. Within the tool we can configure which samples belong to the different biological groups of interest.
 
+Read counts have to be normalised first prior to differential expression testing. There are two main biases that need to be accounted for:-
+
+- size of gene
+    + *longer* genes will have more reads assigned to them
+- library size
+    + a sample that is sequenced to a higher depth will receive more reads
+  
+However, R-based methods such as `edgeR` (implented in Degust) and `DESeq2` have their own method of normalising counts. You will probably encounter other methods of normalising RNA-seq reads such as *RPKM*, *CPM*, *TPM* etc. [This blog](https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/) provides a nice explanation of the current thinking. As part of the `Degust` output, you have the option of downloading normalised counts in various formats. Some other online visualisation tools require normalised counts as input, so it is good to have these to-hand.
+
+
+***To make this a more-realistic example, we will use the published count matrix for this dataset. This was downloaded from the Gene Expression Omnibus (GEO) under the accession number [GSE60450](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450). Note that we have shortened the column headings to help with visualisation***
+
+Download the counts from [this link](GSE60450_Lactation-GenewiseCounts_rename.txt)
+
+
 ### Uploading the count matrix to Degust
 
 N.B. Degust claims to accept a *csv* (comma-separated) file, but is in fact happy with a tabular file like the one we have just created.
 
 - From the main degust page, click *Upload your counts file*
 - Click on Browse
-- Select the file containing the *count matrix* that you previously downloaded to your computer from Galaxy, and click *Open*.
+- Select the location of the file `GSE60450_Lactation-GenewiseCounts_rename.txt`, and click *Open*.
 - Click *Upload*
 - A Configuation page will appear.
 
 ![](media/degust_config.png)
 
-- For Name type "*DGE in SaCer3*" (or whatever you want to call the analysis)
-- For Info columns select "#KEY"
-- For Analyze server side leave box checked.
+- For Name type "*GSE60450*" (or whatever you want to call the analysis)
+- For Info columns select *EntrezGeneID* and *Length* 
 - Click Add condition
-    + Add a condition called “Batch” and select the `batch` columns.
-    + Add a condition called “Chem” and select the `chem` columns.
+    + Refering to the experiment design (below), select the Basal samples and call the condition Basal
+    + Repeat for the Luminal samples
 - Save the settings and then View the results
 
+Run  | Name | CellType | Status
+------------- | ------------- | ------------- | -------------  
+SRR1552444 | MCL1-LA | basal | virgin
+SRR1552445 | MCL1-LB | luminal | virgin
+SRR1552446 | MCL1-LC | Luminal | pregnancy
+SRR1552447 | MCL1-LD | Luminal | pregnancy
+SRR1552448 | MCL1-LE | luminal | lactation
+SRR1552449 | MCL1-LF | luminal | lactation
+SRR1552450 | MCL1-DG | basal | virgin
+SRR1552451 | MCL1-DH | luminal | virgin
+SRR1552452 | MCL1-DI | basal | pregnancy
+SRR1552453 | MCL1-DJ | basal | pregnancy
+SRR1552454 | MCL1-DK | basal | lactation
+SRR1552455 | MCL1-DL | basal | lactation
+
 ## Overview of Degust sections
+
 - Top black panel with Configure settings at right.
 - Left: Conditions: Control and Treatment.
 - Left: Method selection for DGE. **Select edgeR for your method**
@@ -115,17 +146,11 @@ N.B. Degust claims to accept a *csv* (comma-separated) file, but is in fact happ
 
 ## MDS plot
 
+
+
+This is a multidimensional scaling plot which represents the variation between samples. It is a similar concept to a Principal Components Analysis (PCA) plot. The x-axis is the dimension with the highest magnitude. In a standard control/treatment setup, samples should be split along this axis. A desirable plot is shown below:-
+
 ![](media/degust_mds.png)
-
-This is a multidimensional scaling plot which represents the variation between samples.
-Ideally:
-- All the batch samples would be close to each other
-- All the chem samples would be close to each other
-- The batch and chem groups would be far apart
-
-The x-axis is the dimension with the highest magnitude. The control/treatment samples should be split along this axis.
-
-Here, our batch samples are on the left and the chem samples are on the right, which means they are well separated on their major MDS dimension, which looks correct. It is important to retain as much metadata about the samples as possible (e.g. batch, date of sequencing, gender, age etc). This can help diagnose situations when the first dimension is not associated with your main contrast of interest.
 
 ## MA-plot
 
@@ -166,7 +191,7 @@ Table of genes
 
 - gene_id: names of genes. Note that gene names are sometimes specific to a species, or they may be only named as a locus ID (a chromosomal location specified in the genome annotation).
 - FDR: False Discovery Rate. This is an adjusted p value to show the significance of the difference in gene expression between two conditions. Click on column headings to sort. By default, this table is sorted by FDR.
-- batch and chem: log2(Fold Change) of gene expression. The default display is of fold change in the treatment relative to the control. Therefore, values in the batch column are zero. This can be changed in the Options panel at the top right.
+- basal and luminal: log2(Fold Change) of gene expression. The default display is of fold change in the treatment relative to the control. Therefore, values in the batch column are zero. This can be changed in the Options panel at the top right.
     + In some cases, a large fold change will be meaningful but in others, even a small fold change can be important biologically.
 
 The table can be sorted according to any of the columns (e.g. fold-change or p-value)
@@ -178,128 +203,61 @@ Above the genes table is the option to download the results of the current analy
 
 
 
-
-
-# Practice on larger dataset (breast cancer)
-
-We are going to use some more realistic data to practice running a differential expression analysis. In the next section we will use these same results to perform a gene set enrichment and pathways analysis.
-
-The data are from the The Cancer Genome Atlas (TCGA) project and comprise the RNA-seq counts from 5 breast cancer patients and 5 healthy individuals.
-
-The data for this exercise can be downloaded using [this link](tcga_raw_counts.csv)
+<div class="alert alert-warning">
+**Question:** How many genes are differentially-expressed in this analysis? Is this lower than you would expect? Look more closely at the MDS and QC plots. 
+</div>
 
 <div class="alert alert-warning">
-**Question**: Upload the file `tcga_raw_counts,csv` to degust and perform a differential expression analysis
-
-**Make sure that edgeR is selected as the Method to perform the analysis**
-
+**Question:** Having identified the problem with the analysis, modify the configuration and repeat. How many genes are differentially expressed this time?
 </div>
+
+# Analysing a different contrast
+
+Comparing Basal vs Luminal wasn't really the main question of interest in the dataset, but it serves to illustrate the importance of checking QC plots. 
+
+- Create conditions *Basal.Pregnant*, *Basal.Lactation*, etc using the corrected experimental design
+- Make sure that *Basal.Pregnant* and *Basal.Lactation* are both ticked as initial select
+
+![](media/degust-correct-config.png)
 
 Take some time to understand the various parts of the report
 
 <div class="alert alert-warning">
-**Question:** Check out the results for genes `C4orf7` and `SULT1C3`. You should find that both have extreme fold-change values, but are not particularly significant. Why do you think this might be?
-
+**Question:** Make sure the FDR cut-off and abs LogFC cutoffs are set to default and *download* the file and rename to `background.tsv`. We will use this later.
 </div>
-
-Download the Degust results file as a **tsv** file. You will need to click the down arrow next to *Download csv* to change the output type from csv to tsv (tab-separated).
-
-You are now ready to complete the file section on [pathways and enrichment analysis](03-enrichment.nb.html)
-
-<br>
-<br>
-
-<font size="4">***We will not go through the following section in the workshop, but feel free to work through in your own time in Galaxy***</font>
-
-# (Optional) Assessing Differential Expression with *DESeq2*
-
-There are several sensible and respected choices for performing a differential expression analysis on RNA-seq data. Here, we  will illustrate the `DESeq2` method because it is readily available through Galaxy. 
-
-<div class="alert alert-info">
-
-**NGS: RNA Analysis > DESeq2**
-</div>
-
-
-[DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
-is an R package, that is used for analysing differential expression of RNA-Seq data and can either use exact statistical methods or generalised 
-linear models.
-
-`DESeq2` takes an input the counts that we generated in the previous step. Reads counts have to be normalised first prior to differential expression testing. There are two main biases that need to be accounted for:-
-
-- size of gene
-    + *longer* genes will have more reads assigned to them
-- library size
-    + a sample that is sequenced to a higher depth will receive more reads
-  
-`DESeq2` has its' own method of normalising counts. You will probably encounter other methods of normalising RNA-seq reads such as *RPKM*, *CPM*, *TPM* etc. [This blog](https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/) provides a nice explanation of the current thinking. As part of the `DESeq` output, you have the option of downloading normalised counts in various formats. Some other online visualisation tools require normalised counts as input, so it is good to have these to-hand.
-
-
-In the Galaxy tool panel, under NGS Analysis, select
-**NGS: RNA Analysis > DESeq2** and set the parameters as follows:
-
-
-- **1. Factor level** Batch
-- **Count files**  
-    - `batch1-htseq`
-    - `batch2-htseq`
-- **2. Factor level:** Chem
-- **Select columns containing control:**  
-    - `chem1-htseq`
-    - `chem2-htseq`
-- For **Output normalized counts table** select **Yes**
-- Execute
-
-#### 2.  Examine the outputs from the previous step
-1.  Examine the `DeSeq2 result file`by
-    clicking on the **eye icon**.
-    This file is a list of genes sorted by p-value from using DESeq2 to
-    perform differential expression analysis.
-2.  Examine the `DeSeq2 plots` file. This file has some
-    plots from running DESeq2, including [PCA](http://setosa.io/ev/principal-component-analysis/) and clustering.
-    
-
-`DESeq2` reports, for each gene that is being tested, some information that we can use to determine if the gene is different between our conditions of interest. We will do more exploration of differential expression analysis in the next section using a tool that is not included in Galaxy. For now we will concentrate on the task on finding out which genes have *sufficient statistical evidence* for being differentially expressed between our two conditions.
-
-#### 3.  Extract the significant differentially expressed genes.  
-Under Basic Tools, click on **Filter and Sort > Filter**:
-
-- **Filter:** `DESeq2 results file`
-- **With following condition:** `c7 < 0.05 and (c3 > 1.0 or c3 < -1.0)`
-- **Number of header lines to skip:** 1
-- Execute
-
-This will keep the genes that have an adjusted p-value (column 7 in the table) of less
-or equal to 0.05 and have a fold change of greater than 1 or less than -1. There should be 20 genes in this file.
-Rename this file by clicking on the **pencil icon** of and change the name
-from "Filter on data x" to `DESeq2_Significant_DE_Genes`
 
 <div class="alert alert-warning">
-Question: 
-
-Why do you think it is important to use the *adjusted* p-value to select which genes are differentially-expressed. Why might you also want to specify a fold-change cutoff? Discuss with your neighbours
-
+**Question**: How many genes are differentially-expressed with an FDR < 0.05 and abs logFC > 1. Download this file and rename it to `B.preg_vs_lactation.tsv`.
 </div>
+
+
+<div class="alert alert-warning">
+**Question**: Repeat the analysis for Luminal.Pregnant vs Luminal.Lactation and download the table of differentially-expressed results (same FDR and log fold-change). 
+</div>
+
 
 ## Overlapping Gene Lists
 
 ![](https://upload.wikimedia.org/wikipedia/en/e/e4/Venn_stained_glass.jpg)
 
-We might sometimes want to compare the lists of genes that we identify using different methods, or genes identified from more than one contrast. In our example dataset we have one contrast (batch vs chem), but we can however compare genes identified by DESeq2 and Degust (voom).
+We might sometimes want to compare the lists of genes that we identify using different methods, or genes identified from more than one contrast. In our example dataset we can compare the genes in the contrast of pregnant vs luminal in basal and luminal cells
 
 The website *venny* provides a really nice interface for doing this.
 
-- Open both your DESeq2 and Degust results files in Excel
+![](media/venny-config.png)
+
+- Open both your *Basal Pregnant vs Basal Lactation* and *Luminal Pregnant vs Luminal Lactation* results files in Excel
 - Go to the venny website
     + http://bioinfogp.cnb.csic.es/tools/venny/
-- Copy the names of genes with adjusted p-value less than 0.05 in the DESeq2 analysis into the top-left box on the venny website
-- Copy the names of genes with adjusted p-value less than 0.05 in the Degust analysis into the rop-right box on the venny website
+- Copy the names of genes with adjusted p-value less than 0.05 in the Basal analysis into the **List 1** box on the venny website. **List 1** can be renamed to *Basal*
+- Copy the names of genes with adjusted p-value less than 0.05 in the Luminal analysis into the **List 2** box on the venny website. **List 2** can be renamed to **Luminal**
 - venny should now report the number of genes found in each list, the size of the intersection, and genes unique to each method
-- clicking on a particular part of the venn diagram to display the list of genes
+- clicking on a particular overlap part of the venn diagram to display the list of genes common to both cell types. Paste this list of genes into a new Excel worksheet and save as a file `gene_overlap.csv`.
 
 
-## References
+You are now ready to complete the file section on [annotation and enrichment analysis](03-enrichment.nb.html)
 
-[1] Nookaew I, Papini M, Pornputtpong N, Scalcinati G, Fagerberg L, Uhlén M, Nielsen J: A comprehensive comparison of RNA-Seq-based transcriptome analysis from reads to differential gene expression and cross-comparison with microarrays: a case study in Saccharomyces cerevisiae. Nucleic Acids Res 2012, 40 (20):10084 – 10097. doi:10.1093/nar/gks804. Epub 2012 Sep 10
+<br>
+<br>
 
-[2] Guirguis A, Slape C, Failla L, Saw J, Tremblay C, Powell D, Rossello F, Wei A, Strasser A, Curtis D: PUMA promotes apoptosis of hematopoietic progenitors driving leukemic progression in a mouse model of myelodysplasia. Cell Death Differ. 2016 Jun;23(6)
+
