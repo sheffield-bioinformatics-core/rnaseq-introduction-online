@@ -135,31 +135,33 @@ The Broad institute has made this analyis method popular and provides [a version
 
 ### Preparing the data
 
-<div class="alert alert-info">
-**Text Manipulation** -> **Join two files**
-</div>
-
 - Join the `background.tsv` file with the output from running *annotateMyIDs* on the same file.
-- Download the result and open in Excel
-- Create a new file with Gene Symbol in the first column and log fold-change in the second column.
+- Open the file `background.tsv` in Excel
+- Create a new file with Entrez ID in the first column and log fold-change in the second column.
+- Sort the spreadsheet by the second column
+- Remove the column headings
 - Save as a new file and name it `gsea_input.rnk`.
-- Go to and download the website http://ge-lab.org/gskb/ and download the file [http://ge-lab.org/gskb/2-MousePath/MousePath_Pathway_gmt.gmt](MousePath_Pathway_gmt.gmt)
+- Go to and download the website http://baderlab.org/GeneSets and download the file [http://download.baderlab.org/EM_Genesets/current_release/Mouse/Entrezgene/Pathways/Mouse_Human_MSigdb_May_01_2020_Entrezgene.gmt](Mouse_Human_MSigdb_May_01_2020_Entrezgene.gmt)
 
 
 ## Run the GSEAPreranked tool
 
 You should have already downloaded the GSEA app
 
-Load the `gsea_input` file you have just created into the tool by clicking the *Load data* button. If you have problems loading the data, here is a pre-prepared on [here](gsea_input.rnk.txt).
+- Load the `gsea_input` file you have just created into the tool by clicking the *Load data* button. If you have problems loading the data, here is a pre-prepared on [here](gsea_input.rnk.txt).
 
-- Select the *GSEAPreranked* option from tools. You will need to choose what set of genes to use in the analysis. There are many curated *Human* gene sets available through msigDB. However, from http://ge-lab.org/gskb/ we can download gene sets for other organisms.
+- Load the `.gmt` file that you downloaded from baderlab.org
 
-- Make sure the Collapse/Remap to gene symbols drop-down is set to No_Collapse
+- Select the *GSEAPreranked* option from tools. You will need to choose what set of genes to use in the analysis. There are many curated *Human* gene sets available through the app. However, from http://baderlab.org/GeneSets we can download gene sets for other organisms.
+
+- To reduce the running time, you can reduce the *Number of Permutations* option to 1 or 10. 
+
+- Make sure the *Collapse/Remap* to gene symbols drop-down is set to **No_Collapse**
 
 - Click the Run icon at the bottom of the screen
-The bottom-left panel of the GSEA screen should show the progress of the tool as it runs. Once *success** is displayed, you will be able to view the results 
+The bottom-left panel of the GSEA screen should show the progress of the tool as it runs. Once **success** is displayed in green, you will be able to view the results 
 these should be stored in your home directory, or via the Analysis History button on the left of the main screen
 
-- The files gsea_report_for_..._neg_..... and gsea_report_for_...._pos_.... show reports for gene sets that are under- and over-expressed in the study (according to the direction of the log fold-change).
+
 
 
