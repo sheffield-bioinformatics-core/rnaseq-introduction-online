@@ -235,6 +235,16 @@ Take some time to understand the various parts of the report
 **Question**: Repeat the analysis for Luminal.Pregnant vs Luminal.Lactation and download the table of differentially-expressed results (same FDR and log fold-change). 
 </div>
 
+## File Downloads
+
+<div class="alert alert-info">
+If you didn't manage to complete these analyses, you can download the files from here
+
+- [B.preg_vs_lactation.tsv](B.preg_vs_lactation.tsv)
+- [L.preg_vs_lactation.tsv](L.preg_vs_lactation.tsv)
+- [background.tsv](background.tsv)
+
+</div>
 
 ## Overlapping Gene Lists
 
@@ -252,7 +262,7 @@ The website *venny* provides a really nice interface for doing this.
 - Copy the names of genes with adjusted p-value less than 0.05 in the Basal analysis into the **List 1** box on the venny website. **List 1** can be renamed to *Basal*
 - Copy the names of genes with adjusted p-value less than 0.05 in the Luminal analysis into the **List 2** box on the venny website. **List 2** can be renamed to **Luminal**
 - venny should now report the number of genes found in each list, the size of the intersection, and genes unique to each method
-- clicking on a particular overlap part of the venn diagram to display the list of genes common to both cell types. Paste this list of genes into a new Excel worksheet and save as a file `gene_overlap.csv`.
+
 
 
 You are now ready to complete the file section on [annotation and enrichment analysis](03-enrichment.nb.html)
