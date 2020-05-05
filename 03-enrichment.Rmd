@@ -141,7 +141,7 @@ The Broad institute has made this analyis method popular and provides [a version
 - Sort the spreadsheet by the second column
 - Remove the column headings
 - Save as a new file and name it `gsea_input.rnk`.
-- Go to and download the website http://baderlab.org/GeneSets and download the file [http://download.baderlab.org/EM_Genesets/current_release/Mouse/Entrezgene/Pathways/Mouse_Human_MSigdb_May_01_2020_Entrezgene.gmt](Mouse_Human_MSigdb_May_01_2020_Entrezgene.gmt)
+- Go to and download the website http://baderlab.org/GeneSets and download the file [Mouse_Human_MSigdb_May_01_2020_Entrezgene.gmt](http://download.baderlab.org/EM_Genesets/current_release/Mouse/Entrezgene/Pathways/Mouse_Human_MSigdb_May_01_2020_Entrezgene.gmt)
 
 
 ## Run the GSEAPreranked tool
@@ -162,6 +162,9 @@ You should have already downloaded the GSEA app
 The bottom-left panel of the GSEA screen should show the progress of the tool as it runs. Once **success** is displayed in green, you will be able to view the results 
 these should be stored in your home directory, or via the Analysis History button on the left of the main screen
 
+![](media/gsea_sucess.PNG)
 
+The results can be navigated in a web browser
 
+![](media/gsea_results.PNG)
 
