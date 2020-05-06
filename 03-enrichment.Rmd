@@ -88,6 +88,11 @@ This should produce an output table containing the original ID, and the equivlen
 
 **Repeat the same steps with `B.preg_vs_lactation.tsv`**.
 
+- If you have problems creating the annotation files, you can download them
+
+- [B.preg_vs_lactation_annotated.tsv.tabular](B.preg_vs_lactation_annotated.tsv.tabular)
+- [background_annotated.tsv.tabular](background_annotated.tsv.tabular)
+
 <div class="alert alert-warning">
 **Question:**
 Use GOrilla to find enriched pathways in the Basal pregnant vs lactation analysis
