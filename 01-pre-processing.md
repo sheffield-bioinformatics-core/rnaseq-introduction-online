@@ -136,7 +136,7 @@ You can import the data by:
 ### Combining lanes
 
 <div class="alert alert-info">
-In a sequencing experiment, the data for a particular sample might be spread across multiple *lanes*. For example, we might have files named `SRR1552444_L001.fastq.gz` and `SRR1552444_L001.fastq.gz` indicating that the reads for the sample `SRR1552444` are containing in two separate files. If so, the two fastq.gz files will need to be combined. The `fastq.gz` files will need to be decompressed on your machine first (the [7zip tool](https://www.7-zip.org/download.html) can do this on Windows) and then uploaded as fastq. The *Concatentate Datasets* tool can then be used to combine the files for each sample.
+In a sequencing experiment, the data for a particular sample might be spread across multiple *lanes*. For example, we might have files named `SRR1552444_L001.fastq.gz` and `SRR1552444_L002.fastq.gz` indicating that the reads for the sample `SRR1552444` are containing in two separate files. If so, the two fastq.gz files will need to be combined. The `fastq.gz` files will need to be decompressed on your machine first (the [7zip tool](https://www.7-zip.org/download.html) can do this on Windows) and then uploaded as fastq. The *Concatentate Datasets* tool can then be used to combine the files for each sample.
 
 </div>
 
