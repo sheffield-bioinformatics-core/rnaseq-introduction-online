@@ -92,9 +92,9 @@ Read counts have to be normalised first prior to differential expression testing
 However, R-based methods such as `edgeR` (implented in Degust) and `DESeq2` have their own method of normalising counts. You will probably encounter other methods of normalising RNA-seq reads such as *RPKM*, *CPM*, *TPM* etc. [This blog](https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/) provides a nice explanation of the current thinking. As part of the `Degust` output, you have the option of downloading normalised counts in various formats. Some other online visualisation tools require normalised counts as input, so it is good to have these to-hand.
 
 
-***To make this a more-realistic example, we will use the published count matrix for this dataset. This was downloaded from the Gene Expression Omnibus (GEO) under the accession number [GSE60450](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450). Note that we have shortened the column headings to help with visualisation***
+***To make this a more-realistic example, we will use the published count matrix for this dataset. This was downloaded from the Gene Expression Omnibus (GEO) under the accession number [GSE60450](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450). Note that we have shortened the column headings and added gene symbols to help with visualisation and annotation***
 
-Download the counts from [this link](GSE60450_Lactation-GenewiseCounts_rename.txt)
+Download the counts from [this link](GSE60450_Lactation-GenewiseCounts_rename_symbol.csv)
 
 
 ### Uploading the count matrix to Degust
@@ -103,7 +103,7 @@ N.B. Degust claims to accept a *csv* (comma-separated) file, but is in fact happ
 
 - From the main degust page, click *Upload your counts file*
 - Click on Browse
-- Select the location of the file `GSE60450_Lactation-GenewiseCounts_rename.txt`, and click *Open*.
+- Select the location of the file `GSE60450_Lactation-GenewiseCounts_rename_symbol.csv`, and click *Open*.
 - Click *Upload*
 - A Configuation page will appear.
 
@@ -204,7 +204,7 @@ Above the genes table is the option to download the results of the current analy
 
 
 <div class="alert alert-warning">
-**Question:** How many genes are differentially-expressed in this analysis? Is this lower than you would expect? Look more closely at the MDS and QC plots. 
+**Question:** Do the sample groupings in the MDS plot make sense? Do any samples appear to be mislabeled? What effect might this have on the analysis?
 </div>
 
 <div class="alert alert-warning">
@@ -223,11 +223,11 @@ Comparing Basal vs Luminal wasn't really the main question of interest in the da
 Take some time to understand the various parts of the report
 
 <div class="alert alert-warning">
-**Question:** Make sure the FDR cut-off and abs LogFC cutoffs are set to default and *download* the file and rename to `background.tsv`. We will use this later.
+**Question:** Make sure the FDR cut-off and abs LogFC cutoffs are set to default and *download* the file and rename to `background.csv`. We will use this later.
 </div>
 
 <div class="alert alert-warning">
-**Question**: How many genes are differentially-expressed with an FDR < 0.05 and abs logFC > 1. Download this file and rename it to `B.preg_vs_lactation.tsv`.
+**Question**: How many genes are differentially-expressed with an FDR < 0.05 and abs logFC > 1. Download this file and rename it to `B.preg_vs_lactation.csv`.
 </div>
 
 
@@ -240,9 +240,9 @@ Take some time to understand the various parts of the report
 <div class="alert alert-info">
 If you didn't manage to complete these analyses, you can download the files from here
 
-- [B.preg_vs_lactation.tsv](B.preg_vs_lactation.tsv)
-- [L.preg_vs_lactation.tsv](L.preg_vs_lactation.tsv)
-- [background.tsv](background.tsv)
+- [B.preg_vs_lactation.csv](B.preg_vs_lactation.csv)
+- [L.preg_vs_lactation.csv](L.preg_vs_lactation.csv)
+- [background.csv](background.csv)
 
 </div>
 
