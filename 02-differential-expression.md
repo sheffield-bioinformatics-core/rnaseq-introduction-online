@@ -238,7 +238,7 @@ Take some time to understand the various parts of the report
 ## File Downloads
 
 <div class="alert alert-info">
-If you didn't manage to complete these analyses, you can download the files from here
+If you didn't manage to complete these analyses, you can download the files from here by right-clicking on each link and selecting "Save Link as" (or equivalent). They are also available in the course google drive.
 
 - [B.preg_vs_lactation.csv](B.preg_vs_lactation.csv)
 - [L.preg_vs_lactation.csv](L.preg_vs_lactation.csv)
@@ -260,6 +260,7 @@ The website *venny* provides a really nice interface for doing this.
 - Go to the venny website
     + http://bioinfogp.cnb.csic.es/tools/venny/
 - Copy the names of genes with adjusted p-value less than 0.05 in the Basal analysis into the **List 1** box on the venny website. **List 1** can be renamed to *Basal*
+    + *You can select all entries in a column with the shortcut CTRL + SPACE*
 - Copy the names of genes with adjusted p-value less than 0.05 in the Luminal analysis into the **List 2** box on the venny website. **List 2** can be renamed to **Luminal**
 - venny should now report the number of genes found in each list, the size of the intersection, and genes unique to each method
 

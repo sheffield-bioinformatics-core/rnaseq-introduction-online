@@ -21,9 +21,10 @@ library(limma)
 
 In this section we will use the following files
 
-- [`background.tsv`](background.tsv) containing one row for each gene in the comparison Basal.pregnant vs Basal.lactation (27,179 rows).
-- [`B.preg_vs_lactation.tsv`](B.preg_vs_lactation.tsv) containing one row for each found to be DE in the contrast Basal.pregnant vs Basal.Lactation.
+- [`background.csv`](background.csv) containing one row for each gene in the comparison Basal.pregnant vs Basal.lactation (27,179 rows).
+- [`B.preg_vs_lactation.csv`](B.preg_vs_lactation.csv) containing one row for each found to be DE in the contrast Basal.pregnant vs Basal.Lactation.
 
+It will be helpful to have both these files open in Excel.
 
 # Gene-Ontologies and Annotation
 
@@ -71,28 +72,6 @@ There are several popular online tools for performing enrichment analysis
 
 We will be using the online tool [GOrilla](http://cbl-gorilla.cs.technion.ac.il/) to perform the pathways analysis. It has two modes; the first of which accepts a list of *background* and *target* genes. 
 
-However, the identifiers that it accepts does not include EntrezID (which we have). So we will need to convert them to Gene Symbols (for example). We can do this in Galaxy.
-
-First upload the files `background.tsv` and `B.preg_vs_lactation.tsv`
-
-<div class="alert alert-info">
-**Annotation** -> **annotateMyIDs**
-</div>
-
-- File with IDs: *background.tsv*
-- Organism: Mouse
-- ID Type: EntrezID
-- Keep all other defaults
-
-This should produce an output table containing the original ID, and the equivlent Gene Symbol, Ensembl ID.
-
-**Repeat the same steps with `B.preg_vs_lactation.tsv`**.
-
-- If you have problems creating the annotation files, you can download them
-
-- [B.preg_vs_lactation_annotated.tsv.tabular](B.preg_vs_lactation_annotated.tsv.tabular)
-- [background_annotated.tsv.tabular](background_annotated.tsv.tabular)
-
 <div class="alert alert-warning">
 **Question:**
 Use GOrilla to find enriched pathways in the Basal pregnant vs lactation analysis
@@ -105,7 +84,7 @@ Use GOrilla to find enriched pathways in the Basal pregnant vs lactation analysi
 
 3. Choose Organism: `Mus Musculus`
 4. Choose running mode: `Two unranked lists of genes`
-5. Paste the gene symbols corresponding to DE genes into the Target set.
+5. Paste the gene symbols corresponding to DE genes in *Basal pregant vs Basal Lactation* into the Target set.
 6. Paste the gene symbols from the Background set into the other box.
 7. Choose an Ontology: `Process`
 8. `Search Enriched GO terms`
@@ -140,13 +119,13 @@ The Broad institute has made this analyis method popular and provides [a version
 
 ### Preparing the data
 
-- Join the `background.tsv` file with the output from running *annotateMyIDs* on the same file.
-- Open the file `background.tsv` in Excel
-- Create a new file with Entrez ID in the first column and log fold-change in the second column.
-- Sort the spreadsheet by the second column
-- Remove the column headings
-- Save as a new file and name it `gsea_input.rnk`.
-- Go to and download the website http://baderlab.org/GeneSets and download the file [Mouse_Human_MSigdb_May_01_2020_Entrezgene.gmt](http://download.baderlab.org/EM_Genesets/current_release/Mouse/Entrezgene/Pathways/Mouse_Human_MSigdb_May_01_2020_Entrezgene.gmt)
+
+- Open the file `background.csv` in Excel
+- Sort the spreadsheet by the third column (change relative to Basal Pregnant)
+- Remove all columns apart from 1 and 3.
+- Save as a new *tab-delimited* file and name it `gsea_input.rnk`.(Excel might also add a .txt extension, but it should still work)
+- Download a set of pathway definitions for mouse in gmt format. e.g. [Mouse_Human_MSigdb_May_01_2020_symbol.gmt](http://download.baderlab.org/EM_Genesets/current_release/Mouse/symbol/Pathways/Mouse_Human_MSigdb_May_01_2020_symbol.gmt) 
+  + other pathways (including pathways for other organisms) can be downloaded from http://baderlab.org/GeneSets
 
 
 ## Run the GSEAPreranked tool
@@ -157,13 +136,17 @@ You should have already downloaded the GSEA app
 
 - Load the `.gmt` file that you downloaded from baderlab.org
 
-- Select the *GSEAPreranked* option from tools. You will need to choose what set of genes to use in the analysis. There are many curated *Human* gene sets available through the app. However, from http://baderlab.org/GeneSets we can download gene sets for other organisms.
+- Select the *GSEAPreranked* option from tools. You will need to choose what set of genes to use in the analysis. There are many curated *Human* gene sets available through the app. However, from http://baderlab.org/GeneSets we can download gene sets for other organisms. You can select the gmt file that you just loaded by clicking the *Gene matrix (local gmx/gmt)* tab.
 
 - To reduce the running time, you can reduce the *Number of Permutations* option to 1 or 10. 
 
 - Make sure the *Collapse/Remap* to gene symbols drop-down is set to **No_Collapse**
 
-- Click the Run icon at the bottom of the screen
+- Make sure your ranked gene list (`gsea_input.rnk`) appears in the *Ranked List* tab.
+
+![](media/gsea_settings.PNG)
+
+Click the Run icon at the bottom of the screen
 The bottom-left panel of the GSEA screen should show the progress of the tool as it runs. Once **success** is displayed in green, you will be able to view the results 
 these should be stored in your home directory, or via the Analysis History button on the left of the main screen
 
