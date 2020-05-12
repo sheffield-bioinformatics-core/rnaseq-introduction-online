@@ -89,6 +89,7 @@ The *summarised* data for this experiment were made available on the Gene Expres
 
 - https://usegalaxy.eu
 - If attending this course "live" you will be given a link to join a reserved queue on the European Galaxy server
+- The Australian server is an alternative if the European one is down:- https://usegalaxy.org.au/
 
 
 **Make sure you check your email to activate your account**
@@ -132,6 +133,10 @@ You can import the data by:
     - `SRR1552450.fastq.gz`
     - `SRR1552452.fastq.gz`
     - `SRR1552453.fastq.gz`
+
+<div class="alert alert-info">
+The `.gz` at the end of each file name means that it is *compressed* (like a zip file). 
+</div>
 
 ### Combining lanes
 
@@ -477,7 +482,174 @@ make sure **Which tool was used to generate logs** is set to **Samtools** and se
 </div>
 
 
-## (Opional) Section 4.  Visualise the aligned reads with IGV
+## Section 4. Quantification (Counting reads in features)
+
+In order to test for differential expression, we need to count up how many times each "feature" is observed is each sample. The goal of such operations is to produce a *count table* such as that shown below. We can then apply statistical tests to these data
+
+![](media/counts.png)
+
+HTSeq-count creates a count matrix using the number of the reads from each bam
+file that map to the genomic features. For each feature (a
+gene for example) a count matrix shows how many reads were mapped to this
+feature.
+
+Various rules can be used to assign counts to features
+
+![](media/htseq.png)
+
+To obtain the coordinates of each gene, we can use the UCSC genome browser which is integrated into Galaxy.
+
+### Obtaining gene coordinates
+
+
+
+<div class="alert alert-info">
+
+**Get Data** -> **UCSC Main** table browser
+
+</div>
+
+
+![](media/ucsc_browser.png)
+
+Selecting the **UCSC Main** tool from Galaxy will take you to the UCSC table browser. From here we can extract gene coordinates for our genome of interest (`mm10`) in `gtf` format for processing with galaxy.
+
+- Set *clade* to **Mammal**
+- Set *genome* to **Mouse**
+- *assembly* **Dec.2011 (GRCm38/mm10)**
+- *group* **Genes and Gene Prediction**
+- *track* **UCSC RefSeq**
+- *region* **genome**
+- *output format* **GTF - gene transfer format (limited)** and *send output to* **Galaxy**
+
+Click *get output* and *send query to Galaxy* to be returned to Galaxy. A new job will be submitted to retrieve the coordinates from UCSC
+
+
+
+<div class="alert alert-info">
+**RNA Analysis > htseq-count**
+</div>
+
+1.  Use HTSeq-count to count the number of reads for each feature.  
+    In the left tool panel menu, under NGS Analysis, select
+    **NGS Analysis > htseq-count** and set the parameters as follows:  
+    - **Aligned SAM/BAM file**  
+      (Select one of four bam files, or all four using the multiple datasets option)
+    - **GFF file** UCSC Main on Mouse:ncbiRefSeq (genome)
+    - Use defaults for the other fields
+    - Execute
+2.  Repeat for the remaining bam files if running on each bam separately.
+3.  Rename the ht-seq output for each sample. **Do not rename the outputs that have "(no feature)" in their name**
+
+### Further QC on the aligned reads
+
+Additional QC of the aligned reads can be obtained with the Qualimap tool. This also uses information from the genome transcript file to calculate how many reads are counted in exonic, intronic and intergenic regions. For RNA-seq this percentage should be *high*; at least 80 to 90%.
+
+<div class="alert alert-info">
+**RNA-Seq > Qualimap RNA-Seq QC**
+</div>
+
+### Create a count matrix
+
+The htseq tool is designed to produce a separate table of counts for each sample. This is not particularly useful for other tools such as Degust (see next section) which require the counts to be presented in a data matrix where each row is a gene and each column is a particular sample in the dataset.
+
+<div class="alert alert-info">
+*Collection Operations -> Column Join* on Collections
+</div>
+
+- In the *Tabular Files* section, select the `ht-seq` count files from your history *SRR1552444.htseq*, *SRR1552450*, etc... Holding the CTRL key allows multiple files to be selected
+- Keep *Identifier column* as `1`
+
+The output should look something like this...
+![](media/count_matrix.png)
+
+- Download to your computer
+
+
+**You are now ready to follow the next tutorial on [Differential Expression](02-differential-expression.nb.html)**
+
+## Adding extra annotation to results
+
+The count matrix has *RefSeq ID* in the first column, but no other useful annotation. Sometimes we might want other IDs to be added in order to interpret our results. Individual queries can be made online (e.g. Ensembl, biomart) but tedious for large numbers of genes. The Galaxy tool **annotateMyIDs** is a simple tool for annotating a file containing a column of IDs.
+
+<div class="alert alert-info">
+**Annotation** -> **annotateMyIDs**
+</div>
+
+- File with IDs: *Column Join on Data...*
+- Organism: Mouse
+- ID Type: RefSeq
+- Keep all other defaults
+
+This should produce an output table containing the original ID, and the equivlent Gene Symbol, Ensembl ID.
+
+The output can then be *joined* to the original results file to produce a more detailed result
+
+<div class="alert alert-info">
+**Text Manipulation** -> **Join two files**
+</div>
+
+- 1st file: *Column Join on data....*
+- Column to use from 1st file: Column 1
+- 2nd file: result from *annotateMyIDs on data...*
+- Column to use from 2nd file: Column 1
+
+<div class="alert alert-info">
+The step of annotating your results may need modifying (or may not be necessary) depending on what IDs you have used in the counting. Make sure you choose the options carefully when using this tool.
+</div>
+
+# Extra Practice
+
+In the folder you downloaded from google drive, you have the fastq files for all other samples in the dataset. Repeat the workflow steps for these remaining files
+
+- QC with fastQC
+- Alignment against the mm10 genome with HiSat2
+- Counting with htseq
+
+Create a combined QC report and combined count matrix **for all samples**.
+
+# Optional
+
+<font size="4">***We will not go through the following section in the workshop, but feel free to work through in your own time***</font>
+
+# (Optional) Assessing Differential Expression with *DESeq2*
+
+There are several sensible and respected choices for performing a differential expression analysis on RNA-seq data. Here, we  will illustrate the `DESeq2` method because it is readily available through Galaxy. 
+
+<div class="alert alert-info">
+
+**NGS: RNA Analysis > DESeq2**
+</div>
+
+In the Galaxy tool panel, under NGS Analysis, select
+**NGS: RNA Analysis > DESeq2** and set the parameters as follows:
+
+
+- **1. Factor level** Virgin
+- **Count files**  
+    - `SRR1552444.htseq`
+    - `SRR1552450.htseq`
+- **2. Factor level:** Pregnant
+- **Select columns containing control:**  
+    - `SRR1552452.htseq`
+    - `SRR1552453.htseq`
+- For **Output normalized counts table** select **Yes**
+- Execute
+
+#### 2.  Examine the outputs from the previous step
+1.  Examine the `DeSeq2 result file`by
+    clicking on the **eye icon**.
+    This file is a list of genes sorted by p-value from using DESeq2 to
+    perform differential expression analysis.
+2.  Examine the `DeSeq2 plots` file. This file has some
+    plots from running DESeq2, including [PCA](http://setosa.io/ev/principal-component-analysis/) and clustering.
+    
+
+`DESeq2` reports, for each gene that is being tested, some information that we can use to determine if the gene is different between our conditions of interest. We will do more exploration of differential expression analysis in the next section using a tool that is not included in Galaxy. For now we will concentrate on the task on finding out which genes have *sufficient statistical evidence* for being differentially expressed between our two conditions.
+
+
+
+## (Opional) Visualise the aligned reads with IGV
 
 Download the bam files you have created in the previous step by clicking the disk icon on the right-hand panel. Make sure to click both the **Download dataset** and **Download index** buttons. We will now visualise the alignments using the Integrative Genomics Viewer (IGV).
 
@@ -565,168 +737,3 @@ The reads themselves can also be coloured according to
   - read strand
   - sample
 
-
-## Section 5. Quantification (Counting reads in features)
-
-In order to test for differential expression, we need to count up how many times each "feature" is observed is each sample. The goal of such operations is to produce a *count table* such as that shown below. We can then apply statistical tests to these data
-
-![](media/counts.png)
-
-HTSeq-count creates a count matrix using the number of the reads from each bam
-file that map to the genomic features. For each feature (a
-gene for example) a count matrix shows how many reads were mapped to this
-feature.
-
-Various rules can be used to assign counts to features
-
-![](media/htseq.png)
-
-To obtain the coordinates of each gene, we can use the UCSC genome browser which is integrated into Galaxy.
-
-### Obtaining gene coordinates
-
-
-
-<div class="alert alert-info">
-
-**Get Data** -> **UCSC Main** table browser
-
-</div>
-
-
-![](media/ucsc_browser.png)
-
-Selecting the **UCSC Main** tool from Galaxy will take you to the UCSC table browser. From here we can extract gene coordinates for our genome of interest (`mm10`) in `gtf` format for processing with galaxy.
-
-- Set *clade* to **Mammal**
-- Set *genome* to **Mouse**
-- *assembly* **Dec.2011 (GRCm38/mm10)**
-- *group* **Genes and Gene Prediction**
-- *track* **UCSC RefSeq**
-- *region* **genome**
-- *output format* **GTF - gene transfer format (limited)** and *send output to* **Galaxy**
-
-Click *get output* and *send query to Galaxy* to be returned to Galaxy. A new job will be submitted to retrieve the coordinates from UCSC
-
-
-
-<div class="alert alert-info">
-**RNA Analysis > htseq-count**
-</div>
-
-1.  Use HTSeq-count to count the number of reads for each feature.  
-    In the left tool panel menu, under NGS Analysis, select
-    **NGS Analysis > htseq-count** and set the parameters as follows:  
-    - **Aligned SAM/BAM file**  
-      (Select one of four bam files, or all four using the multiple datasets option)
-    - **GFF file** UCSC Main on Mouse:ncbiRefSeq (genome)
-    - Use defaults for the other fields
-    - Execute
-2.  Repeat for the remaining bam files if running on each bam separately.
-3.  Rename the ht-seq output for each sample. **Do not rename the outputs that have "(no feature)" in their name**
-
-## Further QC on the aligned reads
-
-Additional QC of the aligned reads can be obtained with the Qualimap tool. This also uses information from the genome transcript file to calculate how many reads are counted in exonic, intronic and intergenic regions. For RNA-seq this percentage should be *high*; at least 80 to 90%.
-
-<div class="alert alert-info">
-**RNA-Seq > Qualimap RNA-Seq QC**
-</div>
-
-### Create a count matrix
-
-The htseq tool is designed to produce a separate table of counts for each sample. This is not particularly useful for other tools such as Degust (see next section) which require the counts to be presented in a data matrix where each row is a gene and each column is a particular sample in the dataset.
-
-<div class="alert alert-info">
-*Collection Operations -> Column Join* on Collections
-</div>
-
-- In the *Tabular Files* section, select the `ht-seq` count files from your history *SRR1552444.htseq*, *SRR1552450*, etc... Holding the CTRL key allows multiple files to be selected
-- Keep *Identifier column* as `1`
-
-The output should look something like this...
-![](media/count_matrix.png)
-
-- Download to your computer
-
-
-**You are now ready to follow the next tutorial on [Differential Expression](02-differential-expression.nb.html)**
-
-# Adding extra annotation to results
-
-The count matrix has *RefSeq ID* in the first column, but no other useful annotation. Sometimes we might want other IDs to be added in order to interpret our results. Individual queries can be made online (e.g. Ensembl, biomart) but tedious for large numbers of genes. The Galaxy tool **annotateMyIDs** is a simple tool for annotating a file containing a column of IDs.
-
-<div class="alert alert-info">
-**Annotation** -> **annotateMyIDs**
-</div>
-
-- File with IDs: *Column Join on Data...*
-- Organism: Mouse
-- ID Type: RefSeq
-- Keep all other defaults
-
-This should produce an output table containing the original ID, and the equivlent Gene Symbol, Ensembl ID.
-
-The output can then be *joined* to the original results file to produce a more detailed result
-
-<div class="alert alert-info">
-**Text Manipulation** -> **Join two files**
-</div>
-
-- 1st file: *Column Join on data....*
-- Column to use from 1st file: Column 1
-- 2nd file: result from *annotateMyIDs on data...*
-- Column to use from 2nd file: Column 1
-
-<div class="alert alert-info">
-The step of annotating your results may need modifying (or may not be necessary) depending on what IDs you have used in the counting. Make sure you choose the options carefully when using this tool.
-</div>
-
-# Extra Practice
-
-In the folder you downloaded from google drive, you have the fastq files for all other samples in the dataset. Repeat the workflow steps for these remaining files
-
-- QC with fastQC
-- Alignment against the mm10 genome with HiSat2
-- Counting with htseq
-
-Create a combined QC report and combined count matrix **for all samples**.
-
-# Optional
-
-<font size="4">***We will not go through the following section in the workshop, but feel free to work through in your own time***</font>
-
-# (Optional) Assessing Differential Expression with *DESeq2*
-
-There are several sensible and respected choices for performing a differential expression analysis on RNA-seq data. Here, we  will illustrate the `DESeq2` method because it is readily available through Galaxy. 
-
-<div class="alert alert-info">
-
-**NGS: RNA Analysis > DESeq2**
-</div>
-
-In the Galaxy tool panel, under NGS Analysis, select
-**NGS: RNA Analysis > DESeq2** and set the parameters as follows:
-
-
-- **1. Factor level** Virgin
-- **Count files**  
-    - `SRR1552444.htseq`
-    - `SRR1552450.htseq`
-- **2. Factor level:** Pregnant
-- **Select columns containing control:**  
-    - `SRR1552452.htseq`
-    - `SRR1552453.htseq`
-- For **Output normalized counts table** select **Yes**
-- Execute
-
-#### 2.  Examine the outputs from the previous step
-1.  Examine the `DeSeq2 result file`by
-    clicking on the **eye icon**.
-    This file is a list of genes sorted by p-value from using DESeq2 to
-    perform differential expression analysis.
-2.  Examine the `DeSeq2 plots` file. This file has some
-    plots from running DESeq2, including [PCA](http://setosa.io/ev/principal-component-analysis/) and clustering.
-    
-
-`DESeq2` reports, for each gene that is being tested, some information that we can use to determine if the gene is different between our conditions of interest. We will do more exploration of differential expression analysis in the next section using a tool that is not included in Galaxy. For now we will concentrate on the task on finding out which genes have *sufficient statistical evidence* for being differentially expressed between our two conditions.
