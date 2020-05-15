@@ -145,6 +145,21 @@ In a sequencing experiment, the data for a particular sample might be spread acr
 
 </div>
 
+### Uploading large files
+
+<div class="alert alert-info">
+Galaxy recommend that large datasets (Gbs of data) are uploaded using *FTP*. Instructions for doing this can be found here:-
+
+https://galaxyproject.org/ftp-upload/
+
+**N.B. If you are using the European server, replace `usegalaxy.org` with `usegalaxy.eu` when following the instructions**
+
+You will need an FTP program such as [*filezilla*](https://filezilla-project.org/), which has a free download. 
+
+
+</div>
+
+### Understanding fastq format
 
 Each read is described by 4 lines in the file:-
 
