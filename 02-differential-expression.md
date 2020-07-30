@@ -5,6 +5,7 @@ output:
   html_notebook:
     toc: yes
     toc_float: yes
+    css: stylesheets/styles.css
   html_document:
     df_print: paged
     toc: yes
@@ -203,11 +204,11 @@ Above the genes table is the option to download the results of the current analy
 
 
 
-<div class="alert alert-warning">
+<div class="exercise">
 **Question:** Do the sample groupings in the MDS plot make sense? Do any samples appear to be mislabeled? What effect might this have on the analysis?
 </div>
 
-<div class="alert alert-warning">
+<div class="exercise">
 **Question:** Having identified the problem with the analysis, modify the configuration and repeat. How many genes are differentially expressed this time?
 </div>
 
@@ -222,22 +223,22 @@ Comparing Basal vs Luminal wasn't really the main question of interest in the da
 
 Take some time to understand the various parts of the report
 
-<div class="alert alert-warning">
-**Question:** Make sure the FDR cut-off and abs LogFC cutoffs are set to default and *download* the file and rename to `background.csv`. We will use this later.
+<div class="exercise">
+**Exercise:** Make sure the FDR cut-off and abs LogFC cutoffs are set to default and *download* the file and rename to `background.csv`. We will use this later.
 </div>
 
-<div class="alert alert-warning">
-**Question**: How many genes are differentially-expressed with an FDR < 0.05 and abs logFC > 1. Download this file and rename it to `B.preg_vs_lactation.csv`.
+<div class="exercise">
+**Exercise**: How many genes are differentially-expressed with an FDR < 0.05 and abs logFC > 1. Download this file and rename it to `B.preg_vs_lactation.csv`.
 </div>
 
 
-<div class="alert alert-warning">
-**Question**: Repeat the analysis for Luminal.Pregnant vs Luminal.Lactation and download the table of differentially-expressed results (same FDR and log fold-change). 
+<div class="exercise">
+**Exercise**: Repeat the analysis for Luminal.Pregnant vs Luminal.Lactation and download the table of differentially-expressed results (same FDR and log fold-change). 
 </div>
 
 ## File Downloads
 
-<div class="alert alert-info">
+<div class="information">
 If you didn't manage to complete these analyses, you can download the files from here by right-clicking on each link and selecting "Save Link as" (or equivalent). They are also available in the course google drive.
 
 - [B.preg_vs_lactation.csv](B.preg_vs_lactation.csv)

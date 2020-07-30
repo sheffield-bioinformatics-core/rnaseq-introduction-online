@@ -6,6 +6,7 @@ output:
   html_notebook: 
     toc: yes
     toc_float: yes
+    css: stylesheets/styles.css
 ---
 
 ```{r setup, include=FALSE}
@@ -101,12 +102,6 @@ Below the figure is the results table. This links to more information about each
 If you have time, you can also experiment uploading the same genes lists to the online tools [DAVID](https://david.ncifcrf.gov/tools.jsp) and [GeneTrail](https://genetrail2.bioinf.uni-sb.de/)
 
 
-## Using EnrichR
-
-<div class="alert alert-warning">
-**Question:** [EnrichR](http://amp.pharm.mssm.edu/Enrichr/) is another online tool for performing enrichment analysis against a large collection of databases. Go to the website, and paste-in your list of differentially-expressed genes. Explore the results that EnrichR provides
-
-</div>
 
 
 ## Threshold-free analysis
