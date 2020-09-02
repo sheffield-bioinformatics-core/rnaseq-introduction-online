@@ -90,7 +90,7 @@ Read counts have to be normalised first prior to differential expression testing
 - library size
     + a sample that is sequenced to a higher depth will receive more reads
   
-However, R-based methods such as `edgeR` (implented in Degust) and `DESeq2` have their own method of normalising counts. You will probably encounter other methods of normalising RNA-seq reads such as *RPKM*, *CPM*, *TPM* etc. [This blog](https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/) provides a nice explanation of the current thinking. As part of the `Degust` output, you have the option of downloading normalised counts in various formats. Some other online visualisation tools require normalised counts as input, so it is good to have these to-hand.
+However, R-based methods such as `edgeR` (implemented in Degust) and `DESeq2` have their own method of normalising counts. You will probably encounter other methods of normalising RNA-seq reads such as *RPKM*, *CPM*, *TPM* etc. [This blog](https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/) provides a nice explanation of the current thinking. As part of the `Degust` output, you have the option of downloading normalised counts in various formats. Some other online visualisation tools require normalised counts as input, so it is good to have these to-hand.
 
 
 ***To make this a more-realistic example, we will use the published count matrix for this dataset. This was downloaded from the Gene Expression Omnibus (GEO) under the accession number [GSE60450](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60450). Note that we have shortened the column headings and added gene symbols to help with visualisation and annotation***
@@ -106,14 +106,14 @@ N.B. Degust claims to accept a *csv* (comma-separated) file, but is in fact happ
 - Click on Browse
 - Select the location of the file `GSE60450_Lactation-GenewiseCounts_rename_symbol.csv`, and click *Open*.
 - Click *Upload*
-- A Configuation page will appear.
+- A Configuration page will appear.
 
 ![](media/degust_config.png)
 
 - For Name type "*GSE60450*" (or whatever you want to call the analysis)
 - For Info columns select *EntrezGeneID* and *Length* 
 - Click Add condition
-    + Refering to the experiment design (below), select the Basal samples and call the condition Basal
+    + Referring to the experiment design (below), select the Basal samples and call the condition Basal
     + Repeat for the Luminal samples
 - Save the settings and then View the results
 
@@ -267,7 +267,7 @@ The website *venny* provides a really nice interface for doing this.
 
 
 
-You are now ready to complete the file section on [annotation and enrichment analysis](03-enrichment.nb.html)
+You are now ready to complete the final section on [annotation and enrichment analysis](03-enrichment.nb.html)
 
 <br>
 <br>
