@@ -61,7 +61,7 @@ Those eventually wanted to perform their own RNA-seq analysis (for example in R)
 
 ### Courses on analysing RNA-seq data in R
 
-- [Sheffield Bioinformatics Core](http://sbc.shef.ac.uk/training/rna-seq-in-r-2019-01-14/)
+- [Sheffield Bioinformatics Core](https://sbc.shef.ac.uk/training/rna-seq-in-r-2020-02-13/)
 - [Monash Bioinformatics Platform](http://monashbioinformaticsplatform.github.io/RNAseq-DE-analysis-with-R/)
 
 
