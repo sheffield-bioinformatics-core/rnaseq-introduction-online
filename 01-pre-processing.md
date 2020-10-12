@@ -104,6 +104,7 @@ The *summarised* data for this experiment were made available on the Gene Expres
 
 - https://usegalaxy.eu
 - If attending this course "live" you will be given a link to join a reserved queue on the European Galaxy server
+  + Link for October 14th 2020 [https://usegalaxy.eu/join-training/2020-10-12-sbc](https://usegalaxy.eu/join-training/2020-10-12-sbc)
 - The Australian server is an alternative if the European one is down:- https://usegalaxy.org.au/
 
 
@@ -327,7 +328,7 @@ Note: This may take a few minutes, depending on how busy the server is.
 
 
 #### 2.  Rename the output files
-You should have 5 output files for each of the FASTQ input files:
+You should have 4 output files; one for each of the FASTQ input files:
 
 `HISAT2 on data.. aligned reads (BAM)`
 
