@@ -86,6 +86,7 @@ Use GOrilla to find enriched pathways in the Basal pregnant vs lactation analysi
 3. Choose Organism: `Mus Musculus`
 4. Choose running mode: `Two unranked lists of genes`
 5. Paste the gene symbols corresponding to DE genes in *Basal pregant vs Basal Lactation* into the Target set.
+  + **The shortcut CTRL + SPACE will let you select an entire column**
 6. Paste the gene symbols from the Background set into the other box.
 7. Choose an Ontology: `Process`
 8. `Search Enriched GO terms`
@@ -119,7 +120,7 @@ The Broad institute has made this analyis method popular and provides [a version
 - Sort the spreadsheet by the third column (change relative to Basal Pregnant)
 - Remove all columns apart from 1 and 3.
 - Save as a new *tab-delimited* file and name it `gsea_input.rnk`.(Excel might also add a .txt extension, but it should still work)
-- Download a set of pathway definitions for mouse in gmt format. e.g. [Mouse_Human_MSigdb_May_01_2020_symbol.gmt](http://download.baderlab.org/EM_Genesets/current_release/Mouse/symbol/Pathways/Mouse_Human_MSigdb_May_01_2020_symbol.gmt) 
+- Download a set of pathway definitions for mouse in gmt format. e.g. [Mouse_Human_MSigdb_October_01_2020_symbol.gmt](http://download.baderlab.org/EM_Genesets/current_release/Mouse/symbol/Pathways/Mouse_Human_MSigdb_October_01_2020_symbol.gmt) 
   + other pathways (including pathways for other organisms) can be downloaded from http://baderlab.org/GeneSets
 
 
