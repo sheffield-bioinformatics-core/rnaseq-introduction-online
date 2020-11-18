@@ -120,8 +120,8 @@ The Broad institute has made this analyis method popular and provides [a version
 - Sort the spreadsheet by the third column (change relative to Basal Pregnant)
 - Remove all columns apart from 1 and 3.
 - Save as a new *tab-delimited* file and name it `gsea_input.rnk`.(Excel might also add a .txt extension, but it should still work)
-- Download a set of pathway definitions for mouse in gmt format. e.g. [Mouse_Human_MSigdb_October_01_2020_symbol.gmt](http://download.baderlab.org/EM_Genesets/current_release/Mouse/symbol/Pathways/Mouse_Human_MSigdb_October_01_2020_symbol.gmt) 
-  + other pathways (including pathways for other organisms) can be downloaded from http://baderlab.org/GeneSets
+- Download a set of pathway definitions for mouse in gmt format. e.g. [Mouse_Human_MSigdb_October_01_2020_symbol.gmt](http://download.baderlab.org/EM_Genesets/October_01_2020/Mouse/symbol/Pathways/Mouse_Human_MSigdb_October_01_2020_symbol.gmt) - **Right-click to save the link as a file**
+  + other pathways (including pathways for other organisms) can be downloaded from http://download.baderlab.org/EM_Genesets/
 
 
 ## Run the GSEAPreranked tool

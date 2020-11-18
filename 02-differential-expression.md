@@ -100,7 +100,6 @@ Download the counts from [this link](GSE60450_Lactation-GenewiseCounts_rename_sy
 
 ### Uploading the count matrix to Degust
 
-N.B. Degust claims to accept a *csv* (comma-separated) file, but is in fact happy with a tabular file like the one we have just created.
 
 - From the main degust page, click *Upload your counts file*
 - Click on Browse
@@ -111,7 +110,7 @@ N.B. Degust claims to accept a *csv* (comma-separated) file, but is in fact happ
 ![](media/degust_config.png)
 
 - For Name type "*GSE60450*" (or whatever you want to call the analysis)
-- For Info columns select *EntrezGeneID* and *Length* 
+- For Info columns select *SYMBOL*
 - Click Add condition
     + Referring to the experiment design (below), select the Basal samples and call the condition Basal
     + Repeat for the Luminal samples
@@ -141,7 +140,7 @@ SRR1552455 | MCL1-DL | basal | lactation
 - When either of the expression plots are selected, a heatmap appears below.
 - A table of genes (or features); expression in treatment relative to control (Treatment column); and significance (FDR column).
 
-(screenshot from the example at ARPI)
+(**Not that the screenshots are for illustration purposes and taken from a different dataset to that being analysed in the tutorial**)
 
 ![](http://sepsis-omics.github.io/tutorials/modules/dge/images/image12.png)
 
@@ -202,7 +201,9 @@ The table can be sorted according to any of the columns (e.g. fold-change or p-v
 
 Above the genes table is the option to download the results of the current analysis to a csv file. You can also download the *R* code required to reproduce the analysis by clicking the *Show R code* box underneath the Options box.
 
+Plots such as the MDS, MA and heatmap can also be exported by right-clicking on the plot.
 
+## Exercise
 
 <div class="exercise">
 **Question:** Do the sample groupings in the MDS plot make sense? Do any samples appear to be mislabeled? What effect might this have on the analysis?
