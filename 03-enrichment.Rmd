@@ -58,7 +58,7 @@ $$ p = \frac{\binom{a + b}{a}\binom{c +d}{c}}{\binom{n}{a +c}} = \frac{(a+b)!(c+
 
 with:-
 
-```{r echo=FALSE}
+```{r}
 df <- data.frame(`In DE List`  = c("a","c","a+c"), `Not in DE list` = c("b","d","b+d"), RowTotal = c("a +b","c+d","a+b+c+d (=n)"))
 rownames(df) <- c("In Gene Set", "Not in Gene Set","Column Total")
 df
