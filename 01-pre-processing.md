@@ -514,7 +514,7 @@ make sure **Which tool was used to generate logs** is set to **Samtools** and se
 
 ## Section 4. Quantification (Counting reads in features)
 
-In order to test for differential expression, we need to count up how many times each "feature" is observed is each sample. The goal of such operations is to produce a *count table* such as that shown below. We can then apply statistical tests to these data
+In order to test for differential expression, we need to count up how many times each "feature" is observed in each sample. The goal of such operations is to produce a *count table* such as that shown below. We can then apply statistical tests to these data
 
 ![](media/counts.png)
 
