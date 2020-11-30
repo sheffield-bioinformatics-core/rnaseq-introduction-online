@@ -104,6 +104,7 @@ The *summarised* data for this experiment were made available on the Gene Expres
 
 - https://usegalaxy.eu
 - If attending this course "live" you will be given a link to join a reserved queue on the European Galaxy server
+  + [https://usegalaxy.eu/join-training/2020-12-08-sbc](https://usegalaxy.eu/join-training/2020-12-08-sbc)
 - The Australian server is an alternative if the European one is down:- https://usegalaxy.org.au/
 
 
