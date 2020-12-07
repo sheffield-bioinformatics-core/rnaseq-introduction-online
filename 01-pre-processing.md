@@ -65,6 +65,11 @@ Those eventually wanted to perform their own RNA-seq analysis (for example in R)
 - [Monash Bioinformatics Platform](http://monashbioinformaticsplatform.github.io/RNAseq-DE-analysis-with-R/)
 
 
+## RNA-seq workflow
+
+![](https://databeauty.com/figures/2016-09-13-RNA-seq-analysis/rna_seq_workflow.png)
+
+Workflow image from Ting-you Wang's [RNA-seq data analysis page](https://databeauty.com/blog/tutorial/2016/09/13/RNA-seq-analysis.html)
 
 -----
 
@@ -128,16 +133,14 @@ We can going to import the [*fastq* files](https://en.wikipedia.org/wiki/FASTQ_f
 
 You can import the data by:
 
-1.  In the tool panel located on the left, under Basic Tools select **Get
-    Data > Upload File**. Click on the **Choose local file* button on the
+1.  In the tool panel located on the left, under Basic Tools select **Get Data > Upload File**. Click on the **Choose local file** button on the
     bottom section of the pop-up window.
-2.  Navigate to the `fastq` directory of the zip file that you downloaded from google drive
-    There are two files are single-end samples from the basal-virgin condition. 
+2.  Navigate to the `fastq` directory of the zip file that you downloaded from google drive and select these two files are from the basal-virgin condition. 
 
 `SRR1552444.fastq.gz`
 `SRR1552450.fastq.gz`
  
- and these two files are single-end samples from the basal pregnant condition.
+ and these two files are from the basal pregnant condition.
 
 `SRR1552452.fastq.gz`
 `SRR1552453.fastq.gz`
