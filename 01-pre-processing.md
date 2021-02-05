@@ -65,6 +65,11 @@ Those eventually wanted to perform their own RNA-seq analysis (for example in R)
 - [Monash Bioinformatics Platform](http://monashbioinformaticsplatform.github.io/RNAseq-DE-analysis-with-R/)
 
 
+## RNA-seq workflow
+
+![](https://databeauty.com/figures/2016-09-13-RNA-seq-analysis/rna_seq_workflow.png)
+
+Workflow image from Ting-you Wang's [RNA-seq data analysis page](https://databeauty.com/blog/tutorial/2016/09/13/RNA-seq-analysis.html)
 
 -----
 
@@ -103,8 +108,6 @@ The *summarised* data for this experiment were made available on the Gene Expres
 
 
 - https://usegalaxy.eu
-- If attending this course "live" you will be given a link to join a reserved queue on the European Galaxy server
-  + [https://usegalaxy.eu/join-training/2020-12-08-sbc](https://usegalaxy.eu/join-training/2020-12-08-sbc)
 - The Australian server is an alternative if the European one is down:- https://usegalaxy.org.au/
 
 
@@ -129,16 +132,14 @@ We can going to import the [*fastq* files](https://en.wikipedia.org/wiki/FASTQ_f
 
 You can import the data by:
 
-1.  In the tool panel located on the left, under Basic Tools select **Get
-    Data > Upload File**. Click on the **Choose local file* button on the
+1.  In the tool panel located on the left, under Basic Tools select **Get Data > Upload File**. Click on the **Choose local file** button on the
     bottom section of the pop-up window.
-2.  Navigate to the `fastq` directory of the zip file that you downloaded from google drive
-    There are two files are single-end samples from the basal-virgin condition. 
+2.  Navigate to the `fastq` directory of the zip file that you downloaded from google drive and select these two files are from the basal-virgin condition. 
 
 `SRR1552444.fastq.gz`
 `SRR1552450.fastq.gz`
  
- and these two files are single-end samples from the basal pregnant condition.
+ and these two files are from the basal pregnant condition.
 
 `SRR1552452.fastq.gz`
 `SRR1552453.fastq.gz`
@@ -549,7 +550,8 @@ Selecting the **UCSC Main** tool from Galaxy will take you to the UCSC table bro
 - Set *genome* to **Mouse**
 - *assembly* **Dec.2011 (GRCm38/mm10)**
 - *group* **Genes and Gene Prediction**
-- *track* **UCSC RefSeq**
+- *track* **NCBI RefSeq**
+- *table* **UCSC RefSeq (refGene)**
 - *region* **genome**
 - *output format* **GTF - gene transfer format (limited)** and *send output to* **Galaxy**
 
@@ -570,7 +572,22 @@ Click *get output* and *send query to Galaxy* to be returned to Galaxy. A new jo
     - Use defaults for the other fields
     - Execute
 2.  Repeat for the remaining bam files if running on each bam separately.
-3.  Rename the ht-seq output for each sample. **Do not rename the outputs that have "(no feature)" in their name**
+3.  To make things easier to track, rename the ht-seq output for each sample to contain the corresponding sample name (e.g. SRR1552444.htseq). **Do not rename the outputs that have "(no feature)" in their name**
+
+<div class="warning">
+
+When you are returned to Galaxy from UCSC it might look like you have lost all th files in your analysis and are no longer logged in. 
+
+To solve this, log back in and choose the **View all histories** option under the History panel.
+
+![](media/galaxy_history.PNG)
+
+There should be two "histories"; one containing all the outputs you generated before accessing UCSC, and one containing the UCSC output. All this point you can switch back to your previous history, and drag the box containing the UCSC ouput to this history
+
+![](media/switch_histories.PNG)
+
+</div>
+
 
 ### Further QC on the aligned reads
 
