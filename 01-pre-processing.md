@@ -119,6 +119,12 @@ The data for this course have all been shared on a google drive. If you have not
 
 https://drive.google.com/open?id=1ftuBP5L-rcXwsEub2mIaSDJ1tceHYFc7
 
+
+You can download the whole directory as a zip by clicking on the downwards arrow next to the direcory name (Beginners RNA-Seq) 
+
+<img src="media/download_google.png"/>
+
+
 #### 3.  Import the RNA-seq data for the workshop.
 
 We can going to import the [*fastq* files](https://en.wikipedia.org/wiki/FASTQ_format) for this experiment. This is a standard format for storing raw sequencing reads and their associated quality scores. To make the practical quicker, we have *downsampled* the original fastq files to half a million reads.
