@@ -50,7 +50,7 @@ Sections with this background highlight particular shortcuts or other references
 </div>
 
 <div class="warning">
-Sections with this background give information about potential error messages or might encounter, or problems that might arise in your own data analysis.
+Sections with this background give information about potential error messages you might encounter, or problems that might arise in your own data analysis.
 </div>
 
 ### More on Galaxy
