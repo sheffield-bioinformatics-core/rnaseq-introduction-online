@@ -152,3 +152,12 @@ The results can be navigated in a web browser
 
 ![](media/gsea_results.PNG)
 
+# Extra tutorials
+
+The Galaxy Training Network provides more user-friendly training on more-specialised analysis in RNA-seq
+
+- https://training.galaxyproject.org/training-material/topics/transcriptomics/
+- [Making a heatmap](https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rna-seq-viz-with-heatmap2/tutorial.html)
+- [Making a volcano plot](https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rna-seq-viz-with-volcanoplot/tutorial.html)
+
+
