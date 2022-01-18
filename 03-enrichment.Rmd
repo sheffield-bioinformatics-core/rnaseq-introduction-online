@@ -102,55 +102,50 @@ Below the figure is the results table. This links to more information about each
 
 If you have time, you can also experiment uploading the same genes lists to the online tools [DAVID](https://david.ncifcrf.gov/tools.jsp) and [GeneTrail](https://genetrail2.bioinf.uni-sb.de/)
 
-
-
-
 ## Threshold-free analysis
 
-This type of analyis is popular for datasets where differential expression analysis does not reveal many genes that are differentially-expressed on their own. Instead, it seeks to identify genes that as a group have a tendancy to be near the extremes of the log-fold changes.
-
-The Broad institute has made this analyis method popular and provides [a version of GSEA](http://software.broadinstitute.org/gsea/index.jsp) that can be run via a java application. 
+This type of analysis is popular for datasets where differential expression analysis does not reveal many genes that are differentially-expressed on their own. Instead, it seeks to identify genes that as a group have a tendancy to be near the extremes of the log-fold changes. The results are typically presented in the following way.
 
 ![](media/overexpressed-gsea.png)
 
-### Preparing the data
+The "barcode"-like panel represents where genes from a particular pathway (**HALLMARK_E2F_TARGETS** in this case) are located in a gene list *ranked* from most up-regulated to most down-regulated. The peak in the green curve is used to indicate where the majority of genes are located. If this is shifted to the left or the right it indicates that genes belonging to this gene set have a tendancy to be up- or down-regulated.
+
+As such, it does not rely on having to impose arbitrary cut-offs on the data. Instead, we need to provide a measure of the importance of each gene such as it's fold-change. These are then used the rank the genes.
+
+The Broad institute has made this analysis method popular and provides [a version of GSEA](http://software.broadinstitute.org/gsea/index.jsp) that can be run via a java application. However, the application can be a bit fiddly to run, so we will use the GeneTrail website instead
+
+[https://genetrail.bioinf.uni-sb.de/start.html](https://genetrail.bioinf.uni-sb.de/start.html)
 
 
-- Open the file `background.csv` in Excel
-- Sort the spreadsheet by the third column (change relative to Basal Pregnant)
-- Remove all columns apart from 1 and 3.
-- Save as a new *tab-delimited* file and name it `gsea_input.rnk`.(Excel might also add a .txt extension, but it should still work)
-- Download a set of pathway definitions for mouse in gmt format. e.g. [Mouse_Human_MSigdb_October_01_2020_symbol.gmt](http://download.baderlab.org/EM_Genesets/October_01_2020/Mouse/symbol/Pathways/Mouse_Human_MSigdb_October_01_2020_symbol.gmt) - **Right-click to save the link as a file**
-  + other pathways (including pathways for other organisms) can be downloaded from http://download.baderlab.org/EM_Genesets/
+- Open the file `background.csv` in Excel and delete all columns except the `SYMBOL` and `basal.lactation` column.
+<img src="media/GeneTrail_prep.png"/>
+- Go to the GeneTrail website, and select Transcriptomics from the front page
+- Select the **Paste the content of a text file in a tabular format option** and the contents of your modified excel file into the box. **Do not paste the column headings**
+- Click Upload
+
+Hopefully it should recognise your input without any errors, and on the next screen the **Set-level statistic** should be automatically set to **GSEA**
+
+<div class="warning">
+If your data does not get uploaded, double-check that the column heading **basal.lactation** has not been pasted into the text box
+</div>
+
+To make the analysis run faster, you can de-select the GO pathways (biological processes, molecular function and cellular compartment)
+
+<img src="media/genetrail_setup.PNG"/>
+
+After a short wait, you will be able to view and download the results. The tested pathways are grouped into different sources (Kegg, Reactome or Wikipathways) 
+
+<img src="media/genetrail_KEGG.PNG"/>
+
+Each of the significant pathways can be explored in detail by clicking the **More..** link; such as showing which genes in that pathways are up- or downregulated.
+
+<img src="media/genetrail_KEGG_result.PNG"/>
+
+The Rank of the gene shown is the position of the gene in the ranked list; with 1 being most up-regulated gene. The score is the score used to rank the genes (fold-change in our example).
 
 
-## Run the GSEAPreranked tool
 
-You should have already downloaded the GSEA app
 
-- Load the `gsea_input` file you have just created into the tool by clicking the *Load data* button. If you have problems loading the data, here is a pre-prepared on [here](gsea_input.rnk.txt).
-
-- Load the `.gmt` file that you downloaded from baderlab.org
-
-- Select the *GSEAPreranked* option from tools. You will need to choose what set of genes to use in the analysis. There are many curated *Human* gene sets available through the app. However, from http://baderlab.org/GeneSets we can download gene sets for other organisms. You can select the gmt file that you just loaded by clicking the *Gene matrix (local gmx/gmt)* tab.
-
-- To reduce the running time, you can reduce the *Number of Permutations* option to 1 or 10. 
-
-- Make sure the *Collapse/Remap* to gene symbols drop-down is set to **No_Collapse**
-
-- Make sure your ranked gene list (`gsea_input.rnk`) appears in the *Ranked List* tab.
-
-![](media/gsea_settings.PNG)
-
-Click the Run icon at the bottom of the screen
-The bottom-left panel of the GSEA screen should show the progress of the tool as it runs. Once **success** is displayed in green, you will be able to view the results 
-these should be stored in your home directory, or via the Analysis History button on the left of the main screen
-
-![](media/gsea_sucess.PNG)
-
-The results can be navigated in a web browser
-
-![](media/gsea_results.PNG)
 
 # Extra tutorials
 
