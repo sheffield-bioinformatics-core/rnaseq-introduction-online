@@ -250,7 +250,6 @@ If you didn't manage to complete these analyses, you can download the files from
 
 ## Overlapping Gene Lists
 
-![](https://upload.wikimedia.org/wikipedia/en/e/e4/Venn_stained_glass.jpg)
 
 We might sometimes want to compare the lists of genes that we identify using different methods, or genes identified from more than one contrast. In our example dataset we can compare the genes in the contrast of pregnant vs luminal in basal and luminal cells
 
@@ -266,7 +265,23 @@ The website *venny* provides a really nice interface for doing this.
 - Copy the names of genes with adjusted p-value less than 0.05 in the Luminal analysis into the **List 2** box on the venny website. **List 2** can be renamed to **Luminal**
 - venny should now report the number of genes found in each list, the size of the intersection, and genes unique to each method
 
+## Modified analysis using Hidden Factors
 
+Let's consider the situation where we want to identify genes that are different between pregnancy and lactating samples *regardless of the cell type*. We have already done this using the venn diagram approach above, but in this final analysis we will include all the pregnancy and lactating samples, but correct for the differences in cell type. This is more efficient than analysing each cell type separately and comparing the results. Each statistical test we do will involve calling many false positives. We can achieve the same outcome by performing just one statistical test.
+
+
+This can be done by telling Degust about the *hidden factors* in our dataset. The hidden factor in this dataset is whether the sample is from the `basal` or `luminal` samples. In other words, this is a technical factor that influences our results but not a factor that we wish to compare. We only need to specify which samples are from `basal` and DEGUST will infer that the other samples belong to a different cell type. Other hidden factors you might need to include could be (depending on the MDS plot) :-
+
+- sample batch
+- gender
+
+See below for the correct configuration to include the hidden factors.
+
+![](media/hidden_factor.PNG)
+
+You should see that on the MDS plot the samples cluster according to cell type. However, this is fine because we are going to incorporate this hidden factor in the analysis
+
+![](media/hidden_factor_batches.PNG)
 
 You are now ready to complete the final section on [annotation and enrichment analysis](03-enrichment.nb.html)
 
