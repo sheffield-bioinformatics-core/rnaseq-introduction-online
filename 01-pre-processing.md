@@ -113,54 +113,16 @@ The *summarised* data for this experiment were made available on the Gene Expres
 
 **Make sure you check your email to activate your account**
 
-#### 2. Download the course data
 
-The data for this course have all been shared on a google drive. If you have not done so already, please download this directory as a zip file
+#### 2.  Import the RNA-seq data for the workshop.
 
-https://drive.google.com/open?id=1ftuBP5L-rcXwsEub2mIaSDJ1tceHYFc7
+To aid the process of data upload (which can take a while) we have created a link that you can use to access the data for this practical
 
+- [https://usegalaxy.eu/u/markdunning/h/msc-rna-seq-course](https://usegalaxy.eu/u/markdunning/h/msc-rna-seq-course)
 
-You can download the whole directory as a zip by clicking on the downwards arrow next to the direcory name (Beginners RNA-Seq) 
+After clicking the link above, you should see the option to Import the shared history. This will make the input data available to you in Galaxy
 
-<img src="media/download_google.png"/>
-
-
-
-#### 3.  Import the RNA-seq data for the workshop.
-
-We can going to import the [*fastq* files](https://en.wikipedia.org/wiki/FASTQ_format) for this experiment. This is a standard format for storing raw sequencing reads and their associated quality scores. To make the practical quicker, we have *downsampled* the original fastq files to half a million reads.
-
-
-<div class="information">
-
-#### **Get Data -> Upload File ** 
-
-</div>
-
-You can import the data by:
-
-1.  In the tool panel located on the left, under Basic Tools select **Get Data > Upload File**. Click on the **Choose local file** button on the
-    bottom section of the pop-up window.
-2.  Navigate to the `fastq` directory of the zip file that you downloaded from google drive and select these two files are from the basal-virgin condition. 
-
-`SRR1552444.fastq.gz`
-`SRR1552450.fastq.gz`
- 
- and these two files are from the basal pregnant condition.
-
-`SRR1552452.fastq.gz`
-`SRR1552453.fastq.gz`
-
-
-3.  You should now have these 4 files in your history:
-    - `SRR1552444.fastq.gz`
-    - `SRR1552450.fastq.gz`
-    - `SRR1552452.fastq.gz`
-    - `SRR1552453.fastq.gz`
-
-<div class="information">
-The `.gz` at the end of each file name means that it is *compressed* (like a zip file). 
-</div>
+![](media/import_history.PNG)
 
 ### Combining lanes
 
