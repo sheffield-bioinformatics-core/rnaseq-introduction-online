@@ -147,7 +147,8 @@ There are several popular online tools for performing enrichment analysis We wil
 -   **The shortcut CTRL + SPACE will let you select an entire column**
 - Do not paste the column heading `SYMBOL`
 8. In **Select Reference Set** make sure *genome protein-coding* is selected.
-9. Click Submit
+9. Under **Advanced Parameters**, make sure that the *FDR* option is selected as Significance otherwise you will only get the top 10 pathways reported.
+10. Click Submit
 
 
 The page that appears can give a summary of the analysis performed (i.e. the number of genes that were used as input and how many names were recognised as valid gene names) along with various visualisations. The summary tab can be useful to check that you have supplied the correct kind of IDs (e.g. Gene symbol vs Ensembl, Entrez) and selected the correct organism. If few IDs are reported as being mapped, you should check your settings.
@@ -194,6 +195,10 @@ Do not paste the header line of **SYMBOL** and **basal.lactation** into the box
 </div>
 -   Click **Submit**
 
+<div class="information">
+If the GSEA analysis is taking too long, you might be able to spend up the process by choosing KEGG pathways as the database of choice and / or decreasing the number of permutations in the Advanced Parameters tab
+</div>
+
 The results are presented in a similar way to the ORA from the previous section. However, the enrichment scores presented can either be positive or negative - indicating that genes from a given pathway tend to up- or down-regulated. Selecting a pathway from the Table of results or bar chart will given information about the enrichment of the pathway and the *leading genes* (set of genes in the pathway responsible for the enrichment).
 
 
@@ -206,13 +211,10 @@ The results are presented in a similar way to the ORA from the previous section.
 :::
 
 
+# Alternative web-sites
 
-# Extra tutorials
+The performance of WebGestalt can be a bit variable. Here are a couple of suggestions for alternative websites that work in a similar fashion and require the same data input
 
-The Galaxy Training Network provides more user-friendly training on more-specialised analysis in RNA-seq
-
-- https://training.galaxyproject.org/training-material/topics/transcriptomics/
-- [Making a heatmap](https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rna-seq-viz-with-heatmap2/tutorial.html)
-- [Making a volcano plot](https://training.galaxyproject.org/training-material/topics/transcriptomics/tutorials/rna-seq-viz-with-volcanoplot/tutorial.html)
-
+- [ShinyGO](http://bioinformatics.sdstate.edu/go/), for **Over-representation analysis** only
+- GeneTrail, for both Over-representation Analysis or GSEA depending on type of input data
 

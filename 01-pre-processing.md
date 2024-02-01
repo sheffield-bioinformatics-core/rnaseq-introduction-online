@@ -118,7 +118,8 @@ The *summarised* data for this experiment were made available on the Gene Expres
 
 To aid the process of data upload (which can take a while) we have created a link that you can use to access the data for this practical
 
-- [https://usegalaxy.eu/u/markdunning/h/msc-rna-seq-course](https://usegalaxy.eu/u/markdunning/h/msc-rna-seq-course)
+- [If using European server](https://usegalaxy.eu/u/markdunning/h/msc-rna-seq-course)
+- [If using Australian server ](https://usegalaxy.org.au/u/markdunning/h/beginnersrnaseqsalmon)
 
 After clicking the link above, you should see the option to Import the shared history. This will make the input data available to you in Galaxy
 
