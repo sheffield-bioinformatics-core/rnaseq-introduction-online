@@ -216,5 +216,5 @@ The results are presented in a similar way to the ORA from the previous section.
 The performance of WebGestalt can be a bit variable. Here are a couple of suggestions for alternative websites that work in a similar fashion and require the same data input
 
 - [ShinyGO](http://bioinformatics.sdstate.edu/go/), for **Over-representation analysis** only
-- GeneTrail, for both Over-representation Analysis or GSEA depending on type of input data
+- [GeneTrail](https://genetrail.bioinf.uni-sb.de/index?pipeline=gene), for both Over-representation Analysis or GSEA depending on type of input data
 
