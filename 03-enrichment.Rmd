@@ -139,7 +139,7 @@ There are several popular online tools for performing enrichment analysis We wil
 
 3.  Choose Organism: `Mus Musculus`
 4.  Make sure that **Method of interest** is set to `Over-Representation Analysis (ORA)`
-5.  Select **Functional Database** `geneontology`
+5.  Select **Functional Database** `geneontology` and `Biological Process non-redundant`
   + you can change this later if you wish
 6.  Keep **Select Gene ID Type** as `Gene symbol`
 7.  Paste the gene symbols corresponding to DE genes in *Basal pregnant vs Basal Lactation* from your Excel spreadsheet into the Upload Gene List box.
@@ -210,6 +210,9 @@ The results are presented in a similar way to the ORA from the previous section.
 **Exercise:** Use Webgestalt to identify enriched pathways in the Basal Pregnant vs Lactation contrast. Compare the results from the most extreme positive and negative enrichment score, and make sure that you can interpret corresponding the barcode plots.
 :::
 
+If the GSEA analysis is taking too long, please use this link to view some results from the same dataset
+
+- [Pre-generated GSEA results](https://www.webgestalt.org/results/1707054123/#)
 
 # Alternative web-sites
 
